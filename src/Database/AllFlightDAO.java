@@ -28,7 +28,7 @@ import java.util.Scanner;
  * @author trums
  */
 public class AllFlightDAO {
-
+    
     static ConnectDB connect = new ConnectDB();
     static Connection cn = null;
     static Statement stm = null;
@@ -70,6 +70,7 @@ public class AllFlightDAO {
             rs = stm.executeQuery(sql);
             while (rs.next()) {
                 AllFlights flight = new AllFlights();
+                Airlines airlines = new Airlines();
                 flight.setFlightId(rs.getInt("flight_id"));
                 flight.setFlightNumber(rs.getString("flight_number"));
                 flight.setOriginAirportCode(rs.getString("origin_airport_code"));
@@ -85,7 +86,8 @@ public class AllFlightDAO {
                 flight.setEconomyPrice(rs.getDouble("economy_price"));
                 flight.setBusinessPrice(rs.getDouble("business_price"));
                 flight.setFirstClassPrice(rs.getDouble("first_class_price"));
-
+                airlines.setAirlineName(rs.getString("airline_name"));
+                
                 list.add(flight);
             }
         } catch (Exception e) {
@@ -100,11 +102,11 @@ public class AllFlightDAO {
         }
         return list;
     }
-
+    
     public void AddDB(Add add) throws SQLException {
         String sqlFlights = "INSERT INTO flights (airline_id, aircraft_type_id, flight_number, origin_airport_code, destination_airport_code, departure_time, arrival_time, flight_date, flight_status, arrival_date, gate_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlPrices = "INSERT INTO flight_prices (flight_id, economy_price, business_price, first_class_price) VALUES (?, ?, ?, ?)";
-
+        
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStmFlights = cn.prepareStatement(sqlFlights, PreparedStatement.RETURN_GENERATED_KEYS); PreparedStatement pStmPrices = cn.prepareStatement(sqlPrices)) {
 
             // Bắt đầu một giao dịch
@@ -122,7 +124,7 @@ public class AllFlightDAO {
             pStmFlights.setString(9, add.getFlightStatusAdd());
             pStmFlights.setDate(10, java.sql.Date.valueOf(add.getArrivalDateAdd()));
             pStmFlights.setString(11, add.getGateNumberAdd());
-
+            
             pStmFlights.executeUpdate();
 
             // Lấy flight_id vừa thêm
@@ -136,7 +138,7 @@ public class AllFlightDAO {
                     pStmPrices.setDouble(2, add.getEconomyPriceAdd());
                     pStmPrices.setDouble(3, add.getBusinessPriceAdd());
                     pStmPrices.setDouble(4, add.getFirstClassPriceAdd());
-
+                    
                     pStmPrices.executeUpdate();
 
                     // Commit giao dịch
@@ -154,11 +156,11 @@ public class AllFlightDAO {
             throw new SQLException("Error in AddDB method", e);
         }
     }
-
+    
     public void EditFlight(Update updateFlights) throws SQLException {
         String sqlFlights = "UPDATE flights SET airline_id = ?, aircraft_type_id = ?, flight_number = ?, origin_airport_code = ?, destination_airport_code = ?, departure_time = ?, arrival_time = ?, flight_date = ?, flight_status = ?, arrival_date = ?, gate_number = ? WHERE flight_id = ?";
         String sqlPrices = "UPDATE flight_prices SET economy_price = ?, business_price = ?, first_class_price = ? WHERE flight_id = ?";
-
+        
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStmFlights = cn.prepareStatement(sqlFlights); PreparedStatement pStmPrices = cn.prepareStatement(sqlPrices)) {
 
             // Bắt đầu một giao dịch
@@ -177,7 +179,7 @@ public class AllFlightDAO {
             pStmFlights.setDate(10, java.sql.Date.valueOf(updateFlights.getArrivalDateUpdate()));
             pStmFlights.setString(11, updateFlights.getGateNumberUpdate());
             pStmFlights.setInt(12, updateFlights.getFlightIdUpdate());
-
+            
             pStmFlights.executeUpdate();
 
             // Thiết lập các tham số cho câu lệnh UPDATE vào bảng flight_prices
@@ -185,7 +187,7 @@ public class AllFlightDAO {
             pStmPrices.setDouble(2, updateFlights.getBusinessPriceUpdate());
             pStmPrices.setDouble(3, updateFlights.getFirstClassPriceUpdate());
             pStmPrices.setInt(4, updateFlights.getFlightIdUpdate());
-
+            
             pStmPrices.executeUpdate();
 
             // Commit giao dịch
@@ -195,11 +197,11 @@ public class AllFlightDAO {
             throw e;
         }
     }
-
+    
     public void DeleteDB(AllFlights flights) {
         String deleteFlightPricesSQL = "DELETE FROM flight_prices WHERE flight_id = ?";
         String deleteFlightSQL = "DELETE FROM flights WHERE flight_id = ?";
-
+        
         try (Connection cn = connect.GetConnectDB(); PreparedStatement deleteFlightPricesStmt = cn.prepareStatement(deleteFlightPricesSQL); PreparedStatement deleteFlightStmt = cn.prepareStatement(deleteFlightSQL)) {
 
             // Bắt đầu một giao dịch
@@ -215,7 +217,7 @@ public class AllFlightDAO {
 
             // Commit giao dịch
             cn.commit();
-
+            
         } catch (SQLException e) {
             // Xử lý ngoại lệ nếu cần thiết
             e.printStackTrace();
@@ -228,7 +230,7 @@ public class AllFlightDAO {
             }
         }
     }
-
+    
     public AllFlights getFlightById(int flightId) throws SQLException {
         String sql = "SELECT f.*, fp.economy_price, fp.business_price, fp.first_class_price, a.airline_name, at.aircraft_type_name "
                 + "FROM flights f "
@@ -236,12 +238,12 @@ public class AllFlightDAO {
                 + "JOIN airlines a ON f.airline_id = a.airline_id "
                 + "JOIN aircraft_types at ON f.aircraft_type_id = at.aircraft_type_id "
                 + "WHERE f.flight_id = ?";
-
+        
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql)) {
-
+            
             pStm.setInt(1, flightId);
             ResultSet rs = pStm.executeQuery();
-
+            
             if (rs.next()) {
                 AllFlights flight = new AllFlights();
                 flight.setFlightId(rs.getInt("flight_id"));
@@ -259,26 +261,26 @@ public class AllFlightDAO {
                 flight.setEconomyPrice(rs.getDouble("economy_price"));
                 flight.setBusinessPrice(rs.getDouble("business_price"));
                 flight.setFirstClassPrice(rs.getDouble("first_class_price"));
-
+                
                 return flight;
             }
         }
-
+        
         return null; // Hoặc ném một ngoại lệ nếu không tìm thấy chuyến bay
     }
-
+    
     public ArrayList<Seats> getSeatsByFlightId(int flightId) throws SQLException {
         ArrayList<Seats> seats = new ArrayList<>();
         String sql = "SELECT s.*, flight_id FROM seats s \n"
                 + "                 JOIN aircraft_types at ON s.aircraft_type_id = at.aircraft_type_id \n"
                 + "                 JOIN flights f ON at.aircraft_type_id = f.aircraft_type_id \n"
                 + "                 WHERE f.flight_id = ?";
-
+        
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql)) {
-
+            
             pStm.setInt(1, flightId);
             ResultSet rs = pStm.executeQuery();
-
+            
             while (rs.next()) {
                 Seats seat = new Seats();
                 seat.setSeatId(rs.getInt("seat_id"));
@@ -289,15 +291,15 @@ public class AllFlightDAO {
         }
         return seats;
     }
-
+    
     public void BookingFlight(BookingFlight bookingFlight) throws SQLException {
         String sqlAddPass = "INSERT INTO passengers (first_name, last_name, date_of_birth, gender, passport_number, nationality) VALUES (?, ?, ?, ?, ?, ?)";
         String sqlAddBooking = "INSERT INTO bookings (passenger_id, flight_id, seat_id, email, phone, booking_date_time, booking_status, total_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+        
         Connection cn = null;
         PreparedStatement pStmAddPass = null;
         PreparedStatement pStmAddBooking = null;
-
+        
         try {
             // Mở kết nối
             cn = connect.GetConnectDB();
@@ -345,7 +347,7 @@ public class AllFlightDAO {
 
             // Commit giao dịch
             cn.commit();
-
+            
             System.out.println("Booking added successfully");
         } catch (SQLException e) {
             // Rollback giao dịch nếu có lỗi
@@ -403,60 +405,55 @@ public class AllFlightDAO {
             }
         }
     }
- 
-
- public List<AllBooking> getAllBookingDetails() throws SQLException {
-    List<AllBooking> bookingList = new ArrayList<>();
-    String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, " +
-                 "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name " +
-                 "FROM bookings b " +
-                 "JOIN passengers p ON b.passenger_id = p.passenger_id " +
-                 "JOIN seats s ON b.seat_id = s.seat_id " +
-                 "JOIN flights f ON b.flight_id = f.flight_id " +
-                 "JOIN airlines a ON f.airline_id = a.airline_id";
-
-    try (Connection cn = connect.GetConnectDB(); 
-         PreparedStatement pStm = cn.prepareStatement(sql);
-         ResultSet rs = pStm.executeQuery()) {
+    
+    public List<AllBooking> getAllBookingDetails() throws SQLException {
+        List<AllBooking> bookingList = new ArrayList<>();
+        String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, "
+                + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name "
+                + "FROM bookings b "
+                + "JOIN passengers p ON b.passenger_id = p.passenger_id "
+                + "JOIN seats s ON b.seat_id = s.seat_id "
+                + "JOIN flights f ON b.flight_id = f.flight_id "
+                + "JOIN airlines a ON f.airline_id = a.airline_id";
         
-        while (rs.next()) {
-            AllBooking allBooking = new AllBooking();
-            allBooking.setPassengerId(rs.getInt("passenger_id"));
-            allBooking.setFirstName(rs.getString("first_name"));
-            allBooking.setLastName(rs.getString("last_name"));
-            allBooking.setDOB(rs.getDate("date_of_birth").toLocalDate());
-            allBooking.setGender(rs.getString("gender"));
-            allBooking.setPassportId(rs.getString("passport_number"));
-            allBooking.setNationality(rs.getString("nationality"));
-            allBooking.setSeatNumber(rs.getString("seat_number"));
-            allBooking.setBookingId(rs.getInt("booking_id"));
-            allBooking.setFlightStatus(rs.getString("flight_status"));
-            allBooking.setEmail(rs.getString("email"));
-            allBooking.setPhone(rs.getString("phone"));
-            allBooking.setBookingDateTime(rs.getTimestamp("booking_date_time").toLocalDateTime());
-            allBooking.setFlightNumber(rs.getString("flight_number"));
-            allBooking.setGateNumber(rs.getString("gate_number"));
-            allBooking.setAirlineName(rs.getString("airline_name"));
+        try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql); ResultSet rs = pStm.executeQuery()) {
+            
+            while (rs.next()) {
+                AllBooking allBooking = new AllBooking();
+                allBooking.setPassengerId(rs.getInt("passenger_id"));
+                allBooking.setFirstName(rs.getString("first_name"));
+                allBooking.setLastName(rs.getString("last_name"));
+                allBooking.setDOB(rs.getDate("date_of_birth").toLocalDate());
+                allBooking.setGender(rs.getString("gender"));
+                allBooking.setPassportId(rs.getString("passport_number"));
+                allBooking.setNationality(rs.getString("nationality"));
+                allBooking.setSeatNumber(rs.getString("seat_number"));
+                allBooking.setBookingId(rs.getInt("booking_id"));
+                allBooking.setFlightStatus(rs.getString("flight_status"));
+                allBooking.setEmail(rs.getString("email"));
+                allBooking.setPhone(rs.getString("phone"));
+                allBooking.setBookingDateTime(rs.getTimestamp("booking_date_time").toLocalDateTime());
+                allBooking.setFlightNumber(rs.getString("flight_number"));
+                allBooking.setGateNumber(rs.getString("gate_number"));
+                allBooking.setAirlineName(rs.getString("airline_name"));
 
-            // Optionally set seat class based on seat number
-            String seatNumber = rs.getString("seat_number");
-            if (seatNumber.endsWith("A")) {
-                allBooking.setSeatClass("FirstClass");
-            } else if (seatNumber.endsWith("B")) {
-                allBooking.setSeatClass("Business");
-            } else {
-                allBooking.setSeatClass("Economy");
+                // Optionally set seat class based on seat number
+                String seatNumber = rs.getString("seat_number");
+                if (seatNumber.endsWith("A")) {
+                    allBooking.setSeatClass("FirstClass");
+                } else if (seatNumber.endsWith("B")) {
+                    allBooking.setSeatClass("Business");
+                } else {
+                    allBooking.setSeatClass("Economy");
+                }
+                
+                bookingList.add(allBooking);
             }
-
-            bookingList.add(allBooking);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("Error retrieving booking details", e);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        throw new SQLException("Error retrieving booking details", e);
+        return bookingList;
     }
-    return bookingList;
+    
 }
-
-
-}
-

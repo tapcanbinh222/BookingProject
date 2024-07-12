@@ -252,6 +252,8 @@ public class ProjectController implements Initializable {
     private Button btnDetailAllBooking;
     @FXML
     private AnchorPane apButtonAllBooking;
+    @FXML
+    private DatePicker dpFlightDate;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -261,6 +263,7 @@ public class ProjectController implements Initializable {
         comboBoxSeatType.valueProperty().addListener((observable, oldValue, newValue) -> {
             filterSeatsByType(newValue);
         });
+        dpFlightDate.setOnAction(this::filterFlightsByDate);
         comboBoxAircraftName.setValue("Choose Aircraft");
         comboBoxAircraftName.setItems(options);
         comboBoxAirlineName.setValue("Choose Airline");
@@ -282,25 +285,38 @@ public class ProjectController implements Initializable {
     }
 
     public void Flights() {
-        try {
-            tcFlightNumber.setCellValueFactory(new PropertyValueFactory<>("flightNumber"));
-            tcOrigin.setCellValueFactory(new PropertyValueFactory<>("originAirportCode"));
-            tcDestination.setCellValueFactory(new PropertyValueFactory<>("destinationAirportCode"));
-            tcFlightStatus.setCellValueFactory(new PropertyValueFactory<>("flightStatus"));
-            tcDepartureTime.setCellValueFactory(new PropertyValueFactory<>("formattedDepartureTime"));
-            tcArrivalTime.setCellValueFactory(new PropertyValueFactory<>("formattedArrivalTime"));
-            tcFlightDate.setCellValueFactory(new PropertyValueFactory<>("formattedFlightDate"));
-            tcArrivalDate.setCellValueFactory(new PropertyValueFactory<>("formattedArrivalDate"));
-            tcAirlineName.setCellValueFactory(new PropertyValueFactory<>("airlineName"));
-            tcAircraftType.setCellValueFactory(new PropertyValueFactory<>("aircraftTypeName"));
-            tcGateNumber.setCellValueFactory(new PropertyValueFactory<>("gateNumber"));
-            tcEconomyPrice.setCellValueFactory(new PropertyValueFactory<>("economyPrice"));
-            tcBusinessPrice.setCellValueFactory(new PropertyValueFactory<>("businessPrice"));
-            tcFirstClassPrice.setCellValueFactory(new PropertyValueFactory<>("firstClassPrice"));
-            tvFlight.setItems(allFlightList);
-        } catch (Exception e) {
-        }
 
+        tcFlightNumber.setCellValueFactory(new PropertyValueFactory<>("flightNumber"));
+        tcOrigin.setCellValueFactory(new PropertyValueFactory<>("originAirportCode"));
+        tcDestination.setCellValueFactory(new PropertyValueFactory<>("destinationAirportCode"));
+        tcFlightStatus.setCellValueFactory(new PropertyValueFactory<>("flightStatus"));
+        tcDepartureTime.setCellValueFactory(new PropertyValueFactory<>("formattedDepartureTime"));
+        tcArrivalTime.setCellValueFactory(new PropertyValueFactory<>("formattedArrivalTime"));
+        tcFlightDate.setCellValueFactory(new PropertyValueFactory<>("formattedFlightDate"));
+        tcArrivalDate.setCellValueFactory(new PropertyValueFactory<>("formattedArrivalDate"));
+        tcAirlineName.setCellValueFactory(new PropertyValueFactory<>("airlineName"));
+        tcAircraftType.setCellValueFactory(new PropertyValueFactory<>("aircraftTypeName"));
+        tcGateNumber.setCellValueFactory(new PropertyValueFactory<>("gateNumber"));
+        tcEconomyPrice.setCellValueFactory(new PropertyValueFactory<>("economyPrice"));
+        tcBusinessPrice.setCellValueFactory(new PropertyValueFactory<>("businessPrice"));
+        tcFirstClassPrice.setCellValueFactory(new PropertyValueFactory<>("firstClassPrice"));
+        tvFlight.setItems(allFlightList);
+
+    }
+
+    private void filterFlightsByDate(ActionEvent event) {
+        LocalDate selectedDate = dpFlightDate.getValue();
+        if (selectedDate != null) {
+            ObservableList<AllFlights> filteredFlights = FXCollections.observableArrayList();
+            for (AllFlights flight : allFlightList) {
+                if (flight.getFlightDate().equals(selectedDate)) {
+                    filteredFlights.add(flight);
+                }
+            }
+            tvFlight.setItems(filteredFlights);
+        } else {
+            tvFlight.setItems(allFlightList);
+        }
     }
 
     @FXML
@@ -376,9 +392,10 @@ public class ProjectController implements Initializable {
                 add.setFirstClassPriceAdd(Double.parseDouble(txtFirtsClassPice.getText()));
 
                 dao.AddDB(add);
-
-                clearInputFields();
                 tvFlight.refresh();
+                Flights();
+                clearInputFields();
+
                 System.out.println("Add Success");
 
             } catch (NumberFormatException e) {
@@ -887,6 +904,11 @@ public class ProjectController implements Initializable {
 
     @FXML
     private void btnDetailAllBooking(ActionEvent event) {
+    }
+
+    @FXML
+    private void dpHandleFlightDate(ActionEvent event) {
+
     }
 
 }

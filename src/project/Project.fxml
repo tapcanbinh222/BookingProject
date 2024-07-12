@@ -10,10 +10,11 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.ProjectController">
     <children>
-      <AnchorPane prefHeight="390.0" prefWidth="1176.0">
+      <AnchorPane prefHeight="421.0" prefWidth="1182.0">
          <children>
             <TableView fx:id="tvFlight" editable="true" prefHeight="417.0" prefWidth="1182.0">
                <columns>
@@ -74,13 +75,15 @@
             <Button fx:id="btnAdd" contentDisplay="CENTER" layoutX="613.0" layoutY="494.0" mnemonicParsing="false" onAction="#btnHandleAdd" text="Add" textAlignment="CENTER" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apButonCRUD" layoutX="46.0" layoutY="419.0" prefHeight="47.0" prefWidth="445.0">
+      <AnchorPane fx:id="apButonCRUD" layoutX="53.0" layoutY="423.0" prefHeight="111.0" prefWidth="445.0">
          <children>
             <Button fx:id="btnChangeBooking" contentDisplay="CENTER" layoutX="346.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeBooking" text="Booking" textAlignment="CENTER" />
             <Button fx:id="btnchangeUpdate" contentDisplay="CENTER" layoutX="158.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnChangeUpdate" text="Update" textAlignment="CENTER" />
             <Button fx:id="btnDelete" contentDisplay="CENTER" layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleDelete" text="Delete" textAlignment="CENTER" />
             <Button fx:id="btnChangeAdd" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeAdd" text="Add" textAlignment="CENTER" />
             <Button fx:id="btnchangeAllBooking" contentDisplay="CENTER" layoutX="236.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandlechangeAllBooking" text="All Booking" textAlignment="CENTER" />
+            <DatePicker fx:id="dpFlightDate" layoutX="203.0" layoutY="56.0" onAction="#dpHandleFlightDate" />
+            <Text layoutX="108.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FlightDate" />
          </children>
          <opaqueInsets>
             <Insets top="150.0" />
