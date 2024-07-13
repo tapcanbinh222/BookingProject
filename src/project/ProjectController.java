@@ -772,7 +772,14 @@ public class ProjectController implements Initializable {
             bookingFlight.setBookingDateTime(LocalDateTime.now());
             bookingFlight.setBookingStatus("Confirmed");
             bookingFlight.setTotalPrice(calculateTotalPrice(flightsSelected, comboBoxSeat.getValue()));
-            bookingFlight.setAirlineName(airlineName);
+            bookingFlight.setAirlineName(flightsSelected.getAirlineName());
+            bookingFlight.setFlightNumber(flightsSelected.getFlightNumber());
+            bookingFlight.setFlightStatus(flightsSelected.getFlightStatus());
+            bookingFlight.setSeatNumber(comboBoxSeat.getValue());
+            bookingFlight.setSeatClass(comboBoxSeatType.getValue());
+            bookingFlight.setGateNumber(flightsSelected.getGateNumber());
+            
+            
 
             if (isFieldMissing) {
                 // Show error message dialog
