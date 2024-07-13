@@ -9,7 +9,6 @@ import Modal.Airlines;
 import Modal.Booking;
 import Modal.Passenger;
 import Modal.Seats;
-import Service.AllBooking;
 import Service.BookingFlight;
 import Service.Flight;
 import java.sql.Connection;
@@ -404,8 +403,8 @@ public class AllFlightDAO {
         }
     }
     
-    public List<AllBooking> getAllBookingDetails() throws SQLException {
-        List<AllBooking> bookingList = new ArrayList<>();
+    public List<BookingFlight> getAllBookingDetails() {
+        List<BookingFlight> bookingList = new ArrayList<>();
         String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, "
                 + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name "
                 + "FROM bookings b "
@@ -417,7 +416,7 @@ public class AllFlightDAO {
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql); ResultSet rs = pStm.executeQuery()) {
             
             while (rs.next()) {
-                AllBooking allBooking = new AllBooking();
+                BookingFlight allBooking = new BookingFlight();
                 allBooking.setPassengerId(rs.getInt("passenger_id"));
                 allBooking.setFirstName(rs.getString("first_name"));
                 allBooking.setLastName(rs.getString("last_name"));
@@ -449,7 +448,7 @@ public class AllFlightDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new SQLException("Error retrieving booking details", e);
+           
         }
         return bookingList;
     }

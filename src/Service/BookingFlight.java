@@ -4,10 +4,10 @@
  */
 package Service;
 
+import Modal.Airlines;
 import Modal.Booking;
 import Modal.Flights;
 import Modal.Passenger;
-import Modal.Payments;
 import Modal.Seats;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,35 +25,56 @@ public class BookingFlight {
     private String gender;
     private String passportId;
     private String nationality;
+    private String seatNumber;
+    private String seatClass;
+    private String gateNumber;
 
-    private int seatId;
-    private int bookingId;
     private int flightId;
+    private String flightStatus;
+    private String airlineName;
+    private String flightNumber;
+    private int bookingId;
     private String email;
     private String phone;
     private LocalDateTime bookingDateTime;
+    private int seatId;
     private String bookingStatus;
     private double totalPrice;
 
     private Passenger passenger;
     private Seats seats;
     private Booking booking;
+    private Flights flights;
+    private Airlines airlines;
 
     public BookingFlight() {
         this.passenger = new Passenger();
         this.seats = new Seats();
         this.booking = new Booking();
+        this.flights = new Flights();
+        this.airlines = new Airlines();
 
     }
-    
-    public int getSeatId() {
-        return seatId;
+
+    public String getFlightStatus() {
+        return flightStatus;
     }
 
-    public void setSeatId(int seatId) {
-        this.seatId = seatId;
+    public void setFlightStatus(String flightStatus) {
+        this.flightStatus = flightStatus;
+        if (flights != null) {
+            flights.setFlightStatus(flightStatus);
+        }
+    }
+
+    public String getSeatNumber() {
+        return seatNumber;
+    }
+
+    public void setSeatNumber(String seatNumber) {
+        this.seatNumber = seatNumber;
         if (seats != null) {
-            seats.setSeatId(seatId);
+            seats.setSeatNumber(seatNumber);
         }
     }
 
@@ -145,14 +166,14 @@ public class BookingFlight {
         }
     }
 
-    public int getFlightId() {
-        return flightId;
+    public String getFlightNumber() {
+        return flightNumber;
     }
 
-    public void setFlightId(int flightId) {
-        this.flightId = flightId;
-        if (booking != null) {
-            booking.setFlightId(flightId);
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
+        if (flights != null) {
+            flights.setFlightNumber(flightNumber);
         }
     }
 
@@ -189,6 +210,102 @@ public class BookingFlight {
         }
     }
 
+    public String getAirlineName() {
+        return airlineName;
+    }
+
+    public void setAirlineName(String airlineName) {
+        this.airlineName = airlineName;
+        if (airlines != null) {
+            airlines.setAirlineName(airlineName);
+        }
+    }
+
+    public String getGateNumber() {
+        return gateNumber;
+    }
+
+    public void setGateNumber(String gateNumber) {
+        this.gateNumber = gateNumber;
+        if (flights != null) {
+            flights.setGateNumber(gateNumber);
+        }
+    }
+
+    public String getSeatClass() {
+        return seatClass;
+    }
+
+    public void setSeatClass(String seatClass) {
+        this.seatClass = seatClass;
+    }
+
+    public Booking getBooking() {
+        return booking;
+    }
+
+    public void setBooking(Booking booking) {
+        this.booking = booking;
+    }
+
+    public Flights getFlights() {
+        return flights;
+    }
+
+    public void setFlights(Flights flights) {
+        this.flights = flights;
+    }
+
+    public Airlines getAirlines() {
+        return airlines;
+    }
+
+    public void setAirlines(Airlines airlines) {
+        this.airlines = airlines;
+    }
+
+    public Passenger getPassenger() {
+        return passenger;
+    }
+
+    public void setPassenger(Passenger passenger) {
+        this.passenger = passenger;
+    }
+
+    public Seats getSeats() {
+        return seats;
+    }
+
+    public void setSeats(Seats seats) {
+        this.seats = seats;
+    }
+
+    public int getSeatId() {
+        return seatId;
+    }
+
+    public void setSeatId(int seatId) {
+        this.seatId = seatId;
+        if (seats != null) {
+            seats.setSeatId(seatId);
+        }
+    }
+
+    public int getFlightId() {
+        return flightId;
+    }
+
+    public void setFlightId(int flightId) {
+        this.flightId = flightId;
+        if (booking != null) {
+            booking.setFlightId(flightId);
+        }
+    }
+
+    
+
+   
+
     public String getBookingStatus() {
         return bookingStatus;
     }
@@ -211,20 +328,6 @@ public class BookingFlight {
         }
     }
 
-    public Passenger getPassenger() {
-        return passenger;
-    }
-
-    public void setPassenger(Passenger passenger) {
-        this.passenger = passenger;
-    }
-
-    public Seats getSeats() {
-        return seats;
-    }
-
-    public void setSeats(Seats seats) {
-        this.seats = seats;
-    }
+   
 
 }

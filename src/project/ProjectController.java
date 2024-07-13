@@ -6,7 +6,6 @@ package project;
 
 import Database.AllFlightDAO;
 import Modal.Seats;
-import Service.AllBooking;
 import Service.BookingFlight;
 import Service.Flight;
 import java.net.URL;
@@ -159,37 +158,37 @@ public class ProjectController implements Initializable {
     @FXML
     private TextField txtGetEconomyPrice;
     @FXML
-    private TableColumn<AllBooking, String> tcFirstName;
+    private TableColumn<BookingFlight, String> tcFirstName;
     @FXML
-    private TableColumn<AllBooking, String> tcLastName;
+    private TableColumn<BookingFlight, String> tcLastName;
     @FXML
-    private TableColumn<AllBooking, LocalDate> tcDOB;
+    private TableColumn<BookingFlight, LocalDate> tcDOB;
     @FXML
-    private TableColumn<AllBooking, String> tcGender;
+    private TableColumn<BookingFlight, String> tcGender;
     @FXML
-    private TableColumn<AllBooking, String> tcPassportID;
+    private TableColumn<BookingFlight, String> tcPassportID;
     @FXML
-    private TableColumn<AllBooking, String> tcNationality;
+    private TableColumn<BookingFlight, String> tcNationality;
     @FXML
-    private TableColumn<AllBooking, String> tcSeatNumber;
+    private TableColumn<BookingFlight, String> tcSeatNumber;
     @FXML
-    private TableColumn<AllBooking, String> tcSeatClass;
+    private TableColumn<BookingFlight, String> tcSeatClass;
     @FXML
-    private TableColumn<AllBooking, String> tcEmail;
+    private TableColumn<BookingFlight, String> tcEmail;
     @FXML
-    private TableColumn<AllBooking, String> tcPhone;
+    private TableColumn<BookingFlight, String> tcPhone;
     @FXML
-    private TableColumn<AllBooking, LocalDateTime> tcBookingDate;
+    private TableColumn<BookingFlight, LocalDateTime> tcBookingDate;
     @FXML
-    private TableColumn<AllBooking, String> tcGateNumber_Booking;
+    private TableColumn<BookingFlight, String> tcGateNumber_Booking;
     @FXML
-    private TableColumn<AllBooking, String> tcFlightStatus_Passenger;
+    private TableColumn<BookingFlight, String> tcFlightStatus_Passenger;
     @FXML
-    private TableColumn<AllBooking, String> tcAirlineName_AllBooking;
+    private TableColumn<BookingFlight, String> tcAirlineName_AllBooking;
     @FXML
-    private TableColumn<AllBooking, String> tcFlightNumber_AllBooking;
+    private TableColumn<BookingFlight, String> tcFlightNumber_AllBooking;
     @FXML
-    private TableView<AllBooking> tvPassengerFlight;
+    private TableView<BookingFlight> tvPassengerFlight;
     @FXML
     private TextField txtGetAirlineName;
     @FXML
@@ -364,6 +363,7 @@ public class ProjectController implements Initializable {
                         break;
                 }
                 add.setAirlineId(airlineId);
+                add.setAirlineName(selectedAirlineNames);
                 add.setFlightStatus(txtFlightStatus.getText());
                 add.setGateNumber(txtGateNumber.getText());
                 String selectedAircraft = comboBoxAircraftName.getValue();
@@ -380,6 +380,7 @@ public class ProjectController implements Initializable {
                         break;
                 }
                 add.setAircraftTypeId(aircraftTypeId);
+                add.setAircraftTypeName(selectedAircraft);
                 add.setFlightDate(dpDepartureDate.getValue());
                 add.setArrivalDate(dpArrivalDate.getValue());
                 add.setEconomyPrice(Double.parseDouble(txtEconomyPrice.getText()));
@@ -427,104 +428,103 @@ public class ProjectController implements Initializable {
 
     @FXML
     private void btnHandleUpdate(ActionEvent event) {
-    Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
+        Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
 
-    StringBuilder errorMessage = new StringBuilder("Missing Fields:\n");
+        StringBuilder errorMessage = new StringBuilder("Missing Fields:\n");
 
-    if (isEmpty(txtFlightNumber)) {
-        errorMessage.append("Flight Number\n");
-    }
-    if (isEmpty(comboBoxOrigin)) {
-        errorMessage.append("Origin\n");
-    }
-    if (isEmpty(comboBoxDestination)) {
-        errorMessage.append("Destination\n");
-    }
-    if (isEmpty(txtDepartureTime)) {
-        errorMessage.append("Departure Time\n");
-    }
-    if (isEmpty(txtArrivalTime)) {
-        errorMessage.append("Arrival Time\n");
-    }
-    if (isEmpty(comboBoxAirlineName)) {
-        errorMessage.append("Airline Name\n");
-    }
-    if (isEmpty(txtFlightStatus)) {
-        errorMessage.append("Flight Status\n");
-    }
-    if (isEmpty(txtGateNumber)) {
-        errorMessage.append("Gate Number\n");
-    }
-    if (isEmpty(txtEconomyPrice)) {
-        errorMessage.append("Economy Price\n");
-    }
-    if (isEmpty(txtBusinessPrice)) {
-        errorMessage.append("Business Price\n");
-    }
-    if (isEmpty(txtFirtsClassPice)) {
-        errorMessage.append("First Class Price\n");
-    }
-    if (dpArrivalDate.getValue() == null) {
-        errorMessage.append("Arrival Date\n");
-    }
-    if (dpDepartureDate.getValue() == null) {
-        errorMessage.append("Departure Date\n");
-    }
-    if (isEmpty(comboBoxAircraftName)) {
-        errorMessage.append("Aircraft Name\n");
-    }
-
-    if (errorMessage.length() > 16) { // Check if any error message has been added
-        showAlert("Invalid Fields", errorMessage.toString());
-        return;
-    }
-
-    try {
-        Flight updateFlights = new Flight();
-
-        updateFlights.setFlightNumber(txtFlightNumber.getText());
-        updateFlights.setOriginAirportCode(comboBoxOrigin.getValue());
-        updateFlights.setDestinationAirportCode(comboBoxDestination.getValue());
-        updateFlights.setDepartureTime(LocalTime.parse(txtDepartureTime.getText()));
-        updateFlights.setArrivalTime(LocalTime.parse(txtArrivalTime.getText()));
-        updateFlights.setAirlineId(getAirlineIdByName(comboBoxAirlineName.getValue()));
-        updateFlights.setAirlineName(comboBoxAirlineName.getValue());
-        updateFlights.setFlightStatus(txtFlightStatus.getText());
-        updateFlights.setGateNumber(txtGateNumber.getText());
-        updateFlights.setAircraftTypeId(getAircraftTypeIdByName(comboBoxAircraftName.getValue()));
-        updateFlights.setAircraftTypeName(comboBoxAircraftName.getValue());
-        updateFlights.setFlightDate(dpDepartureDate.getValue());
-        updateFlights.setArrivalDate(dpArrivalDate.getValue());
-        updateFlights.setEconomyPrice(Double.parseDouble(txtEconomyPrice.getText()));
-        updateFlights.setBusinessPrice(Double.parseDouble(txtBusinessPrice.getText()));
-        updateFlights.setFirstClassPrice(Double.parseDouble(txtFirtsClassPice.getText()));
-
-        allFlightDAO.EditFlight(updateFlights);
-        int index = allFlightList.indexOf(flightsSelected);
-        if (index != -1) {
-            allFlightList.set(index, updateFlights);
+        if (isEmpty(txtFlightNumber)) {
+            errorMessage.append("Flight Number\n");
         }
-        tvFlight.refresh();
+        if (isEmpty(comboBoxOrigin)) {
+            errorMessage.append("Origin\n");
+        }
+        if (isEmpty(comboBoxDestination)) {
+            errorMessage.append("Destination\n");
+        }
+        if (isEmpty(txtDepartureTime)) {
+            errorMessage.append("Departure Time\n");
+        }
+        if (isEmpty(txtArrivalTime)) {
+            errorMessage.append("Arrival Time\n");
+        }
+        if (isEmpty(comboBoxAirlineName)) {
+            errorMessage.append("Airline Name\n");
+        }
+        if (isEmpty(txtFlightStatus)) {
+            errorMessage.append("Flight Status\n");
+        }
+        if (isEmpty(txtGateNumber)) {
+            errorMessage.append("Gate Number\n");
+        }
+        if (isEmpty(txtEconomyPrice)) {
+            errorMessage.append("Economy Price\n");
+        }
+        if (isEmpty(txtBusinessPrice)) {
+            errorMessage.append("Business Price\n");
+        }
+        if (isEmpty(txtFirtsClassPice)) {
+            errorMessage.append("First Class Price\n");
+        }
+        if (dpArrivalDate.getValue() == null) {
+            errorMessage.append("Arrival Date\n");
+        }
+        if (dpDepartureDate.getValue() == null) {
+            errorMessage.append("Departure Date\n");
+        }
+        if (isEmpty(comboBoxAircraftName)) {
+            errorMessage.append("Aircraft Name\n");
+        }
 
-        // Set ComboBox values after update
-        comboBoxAirlineName.setValue(getAirlineNameById(updateFlights.getAirlineId()));
-        comboBoxAircraftName.setValue(getAircraftNameById(updateFlights.getAircraftTypeId()));
+        if (errorMessage.length() > 16) { // Check if any error message has been added
+            showAlert("Invalid Fields", errorMessage.toString());
+            return;
+        }
 
-        clearInputFields();
-        tvFlight.setVisible(true);
-        apButonCRUD.setVisible(true);
-        apAdd.setVisible(false);
-        tvFlight.refresh();
-        showAlert("Success", "Flight updated successfully.");
-    } catch (NumberFormatException e) {
-        showAlert("Error", "Please enter a valid number for price.");
-    } catch (DateTimeParseException e) {
-        showAlert("Error", "Invalid time or date format.");
-    } catch (SQLException e) {
-        showAlert("Error", "Unknown error: " + e.getMessage());
+        try {
+            Flight updateFlights = new Flight();
+
+            updateFlights.setFlightNumber(txtFlightNumber.getText());
+            updateFlights.setOriginAirportCode(comboBoxOrigin.getValue());
+            updateFlights.setDestinationAirportCode(comboBoxDestination.getValue());
+            updateFlights.setDepartureTime(LocalTime.parse(txtDepartureTime.getText()));
+            updateFlights.setArrivalTime(LocalTime.parse(txtArrivalTime.getText()));
+            updateFlights.setAirlineId(getAirlineIdByName(comboBoxAirlineName.getValue()));
+            updateFlights.setAirlineName(comboBoxAirlineName.getValue());
+            updateFlights.setFlightStatus(txtFlightStatus.getText());
+            updateFlights.setGateNumber(txtGateNumber.getText());
+            updateFlights.setAircraftTypeId(getAircraftTypeIdByName(comboBoxAircraftName.getValue()));
+            updateFlights.setAircraftTypeName(comboBoxAircraftName.getValue());
+            updateFlights.setFlightDate(dpDepartureDate.getValue());
+            updateFlights.setArrivalDate(dpArrivalDate.getValue());
+            updateFlights.setEconomyPrice(Double.parseDouble(txtEconomyPrice.getText()));
+            updateFlights.setBusinessPrice(Double.parseDouble(txtBusinessPrice.getText()));
+            updateFlights.setFirstClassPrice(Double.parseDouble(txtFirtsClassPice.getText()));
+
+            allFlightDAO.EditFlight(updateFlights);
+            int index = allFlightList.indexOf(flightsSelected);
+            if (index != -1) {
+                allFlightList.set(index, updateFlights);
+            }
+            tvFlight.refresh();
+
+            // Set ComboBox values after update
+            comboBoxAirlineName.setValue(getAirlineNameById(updateFlights.getAirlineId()));
+            comboBoxAircraftName.setValue(getAircraftNameById(updateFlights.getAircraftTypeId()));
+
+            clearInputFields();
+            tvFlight.setVisible(true);
+            apButonCRUD.setVisible(true);
+            apAdd.setVisible(false);
+            tvFlight.refresh();
+            showAlert("Success", "Flight updated successfully.");
+        } catch (NumberFormatException e) {
+            showAlert("Error", "Please enter a valid number for price.");
+        } catch (DateTimeParseException e) {
+            showAlert("Error", "Invalid time or date format.");
+        } catch (SQLException e) {
+            showAlert("Error", "Unknown error: " + e.getMessage());
+        }
     }
-}
-
 
     private boolean isEmpty(TextField textField) {
         return textField.getText() == null || textField.getText().isEmpty();
@@ -772,6 +772,7 @@ public class ProjectController implements Initializable {
             bookingFlight.setBookingDateTime(LocalDateTime.now());
             bookingFlight.setBookingStatus("Confirmed");
             bookingFlight.setTotalPrice(calculateTotalPrice(flightsSelected, comboBoxSeat.getValue()));
+            bookingFlight.setAirlineName(airlineName);
 
             if (isFieldMissing) {
                 // Show error message dialog
@@ -782,6 +783,7 @@ public class ProjectController implements Initializable {
                 alert.showAndWait();
             } else {
                 dao.BookingFlight(bookingFlight);
+                allBookingList.add(bookingFlight);
                 // Show success message dialog
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Success");
@@ -871,11 +873,11 @@ public class ProjectController implements Initializable {
         apButtonAllBooking.setVisible(true);
 
     }
-
+      ObservableList<BookingFlight> allBookingList = FXCollections.observableArrayList(allFlightDAO.getAllBookingDetails());
     public void AllBookings() {
         try {
             // Lấy danh sách tất cả các đặt chỗ từ DAO
-            ObservableList<AllBooking> allBookingList = FXCollections.observableArrayList(allFlightDAO.getAllBookingDetails());
+         
 
             // Thiết lập CellValueFactory cho từng cột
             tcFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
