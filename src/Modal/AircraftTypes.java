@@ -12,9 +12,9 @@ public class AircraftTypes {
 
     private int aircraftTypeId;
     private String aircraftTypeName;
-    private int economy_seats;
-    private int premium_economy_seats;
-    private int business_seats;
+    private int economySeats;
+    private int firstClassSeats;
+    private int businessSeats;
 
     public int getAircraftTypeId() {
         return aircraftTypeId;
@@ -32,30 +32,32 @@ public class AircraftTypes {
         this.aircraftTypeName = aircraftTypeName;
     }
 
-
-    public int getEconomy_seats() {
-        return economy_seats;
+    public int getEconomySeats() {
+        return economySeats;
     }
 
-    public void setEconomy_seats(int economy_seats) {
-        this.economy_seats = economy_seats;
+    public void setEconomySeats(int economySeats) {
+        this.economySeats = economySeats;
     }
 
-    public int getPremium_economy_seats() {
-        return premium_economy_seats;
+    public int getFirstClassSeats() {
+        return firstClassSeats;
     }
 
-    public void setPremium_economy_seats(int premium_economy_seats) {
-        this.premium_economy_seats = premium_economy_seats;
+    public void setFirstClassSeats(int firstClassSeats) {
+        this.firstClassSeats = firstClassSeats;
     }
 
-    public int getBusiness_seats() {
-        return business_seats;
+    public int getBusinessSeats() {
+        return businessSeats;
     }
 
-    public void setBusiness_seats(int business_seats) {
-        this.business_seats = business_seats;
+    public void setBusinessSeats(int businessSeats) {
+        this.businessSeats = businessSeats;
     }
+
+
+   
 
 
 }

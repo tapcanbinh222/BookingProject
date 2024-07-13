@@ -51,7 +51,7 @@ public class Update {
             flights.setFlightId(flightIdUpdate);
         }
     }
-    public Update(AllFlights flight) {
+    public Update(Flight flight) {
         this.airlineIdUpdate = flight.getAirlineId();
         this.aircraftTypeIdUpdate = flight.getAircraftTypeId();
         this.flightNumberUpdate = flight.getFlightNumber();

@@ -3,15 +3,15 @@ package Modal;
 public class Seats {
 
     private int seatId;
-    private int aicraftTypeID;
+    private int aicraftTypeId;
     private String seatNumber;
     private boolean isAvailable;
 
     public Seats() {}
 
-    public Seats(int seatId, int aicraftTypeID, String seatNumber, boolean isAvailable) {
+    public Seats(int seatId, int aicraftTypeId, String seatNumber, boolean isAvailable) {
         this.seatId = seatId;
-        this.aicraftTypeID = aicraftTypeID;
+        this.aicraftTypeId = aicraftTypeId;
         this.seatNumber = seatNumber;
         this.isAvailable = isAvailable;
     }
@@ -24,7 +24,7 @@ public class Seats {
     }
 
     public void setIsAvailable(boolean available) { // Phương thức setter cho isAvailable
-        isAvailable = available;
+        this.isAvailable = available;
     }
 
     public int getSeatId() {
@@ -35,12 +35,12 @@ public class Seats {
         this.seatId = seatId;
     }
 
-    public int getAicraftTypeID() {
-        return aicraftTypeID;
+    public int getAicraftTypeId() {
+        return aicraftTypeId;
     }
 
-    public void setAicraftTypeID(int aicraftTypeID) {
-        this.aicraftTypeID = aicraftTypeID;
+    public void setAicraftTypeId(int aicraftTypeId) {
+        this.aicraftTypeId = aicraftTypeId;
     }
 
     public String getSeatNumber() {

@@ -7,13 +7,11 @@ package Database;
 import Modal.AircraftTypes;
 import Modal.Airlines;
 import Modal.Booking;
-import Service.AllFlights;
 import Modal.Passenger;
 import Modal.Seats;
-import Service.Add;
 import Service.AllBooking;
 import Service.BookingFlight;
-import Service.Update;
+import Service.Flight;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,8 +35,8 @@ public class AllFlightDAO {
     static PreparedStatement pStm = null;
 //
 
-    public ArrayList<AllFlights> listAllFlight() {
-        ArrayList<AllFlights> list = new ArrayList<>();
+    public ArrayList<Flight> listAllFlight() {
+        ArrayList<Flight> list = new ArrayList<>();
         String sql = "SELECT \n"
                 + "    flights.flight_id, \n"
                 + "    flights.flight_number, \n"
@@ -69,7 +67,7 @@ public class AllFlightDAO {
             stm = cn.createStatement();
             rs = stm.executeQuery(sql);
             while (rs.next()) {
-                AllFlights flight = new AllFlights();
+                Flight flight = new Flight();
                 Airlines airlines = new Airlines();
                 flight.setFlightId(rs.getInt("flight_id"));
                 flight.setFlightNumber(rs.getString("flight_number"));
@@ -103,7 +101,7 @@ public class AllFlightDAO {
         return list;
     }
     
-    public void AddDB(Add add) throws SQLException {
+    public void AddDB(Flight flight) throws SQLException {
         String sqlFlights = "INSERT INTO flights (airline_id, aircraft_type_id, flight_number, origin_airport_code, destination_airport_code, departure_time, arrival_time, flight_date, flight_status, arrival_date, gate_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlPrices = "INSERT INTO flight_prices (flight_id, economy_price, business_price, first_class_price) VALUES (?, ?, ?, ?)";
         
@@ -113,17 +111,17 @@ public class AllFlightDAO {
             cn.setAutoCommit(false);
 
             // Thiết lập các tham số cho câu lệnh INSERT vào bảng flights
-            pStmFlights.setInt(1, add.getAirlineIdAdd());
-            pStmFlights.setInt(2, add.getAircraftTypeIdAdd());
-            pStmFlights.setString(3, add.getFlightNumberAdd());
-            pStmFlights.setString(4, add.getOriginAirportCodeAdd());
-            pStmFlights.setString(5, add.getDestinationAirportCodeAdd());
-            pStmFlights.setTime(6, java.sql.Time.valueOf(add.getDepartureTimeAdd()));
-            pStmFlights.setTime(7, java.sql.Time.valueOf(add.getArrivalTimeAdd()));
-            pStmFlights.setDate(8, java.sql.Date.valueOf(add.getFlightDateAdd()));
-            pStmFlights.setString(9, add.getFlightStatusAdd());
-            pStmFlights.setDate(10, java.sql.Date.valueOf(add.getArrivalDateAdd()));
-            pStmFlights.setString(11, add.getGateNumberAdd());
+            pStmFlights.setInt(1, flight.getAirlineId());
+            pStmFlights.setInt(2, flight.getAircraftTypeId());
+            pStmFlights.setString(3, flight.getFlightNumber());
+            pStmFlights.setString(4, flight.getOriginAirportCode());
+            pStmFlights.setString(5, flight.getDestinationAirportCode());
+            pStmFlights.setTime(6, java.sql.Time.valueOf(flight.getDepartureTime()));
+            pStmFlights.setTime(7, java.sql.Time.valueOf(flight.getArrivalTime()));
+            pStmFlights.setDate(8, java.sql.Date.valueOf(flight.getFlightDate()));
+            pStmFlights.setString(9, flight.getFlightStatus());
+            pStmFlights.setDate(10, java.sql.Date.valueOf(flight.getArrivalDate()));
+            pStmFlights.setString(11, flight.getGateNumber());
             
             pStmFlights.executeUpdate();
 
@@ -135,9 +133,9 @@ public class AllFlightDAO {
 
                     // Thiết lập các tham số cho câu lệnh INSERT vào bảng flight_prices
                     pStmPrices.setInt(1, flightId);
-                    pStmPrices.setDouble(2, add.getEconomyPriceAdd());
-                    pStmPrices.setDouble(3, add.getBusinessPriceAdd());
-                    pStmPrices.setDouble(4, add.getFirstClassPriceAdd());
+                    pStmPrices.setDouble(2, flight.getEconomyPrice());
+                    pStmPrices.setDouble(3, flight.getBusinessPrice());
+                    pStmPrices.setDouble(4, flight.getFirstClassPrice());
                     
                     pStmPrices.executeUpdate();
 
@@ -157,7 +155,7 @@ public class AllFlightDAO {
         }
     }
     
-    public void EditFlight(Update updateFlights) throws SQLException {
+    public void EditFlight(Flight updateFlights) throws SQLException {
         String sqlFlights = "UPDATE flights SET airline_id = ?, aircraft_type_id = ?, flight_number = ?, origin_airport_code = ?, destination_airport_code = ?, departure_time = ?, arrival_time = ?, flight_date = ?, flight_status = ?, arrival_date = ?, gate_number = ? WHERE flight_id = ?";
         String sqlPrices = "UPDATE flight_prices SET economy_price = ?, business_price = ?, first_class_price = ? WHERE flight_id = ?";
         
@@ -167,26 +165,26 @@ public class AllFlightDAO {
             cn.setAutoCommit(false);
 
             // Thiết lập các tham số cho câu lệnh UPDATE vào bảng flights
-            pStmFlights.setInt(1, updateFlights.getAirlineIdUpdate());
-            pStmFlights.setInt(2, updateFlights.getAircraftTypeIdUpdate());
-            pStmFlights.setString(3, updateFlights.getFlightNumberUpdate());
-            pStmFlights.setString(4, updateFlights.getOriginAirportCodeUpdate());
-            pStmFlights.setString(5, updateFlights.getDestinationAirportCodeUpdate());
-            pStmFlights.setTime(6, java.sql.Time.valueOf(updateFlights.getDepartureTimeUpdate()));
-            pStmFlights.setTime(7, java.sql.Time.valueOf(updateFlights.getArrivalTimeUpdate()));
-            pStmFlights.setDate(8, java.sql.Date.valueOf(updateFlights.getFlightDateUpdate()));
-            pStmFlights.setString(9, updateFlights.getFlightStatusUpdate());
-            pStmFlights.setDate(10, java.sql.Date.valueOf(updateFlights.getArrivalDateUpdate()));
-            pStmFlights.setString(11, updateFlights.getGateNumberUpdate());
-            pStmFlights.setInt(12, updateFlights.getFlightIdUpdate());
+            pStmFlights.setInt(1, updateFlights.getAirlineId());
+            pStmFlights.setInt(2, updateFlights.getAircraftTypeId());
+            pStmFlights.setString(3, updateFlights.getFlightNumber());
+            pStmFlights.setString(4, updateFlights.getOriginAirportCode());
+            pStmFlights.setString(5, updateFlights.getDestinationAirportCode());
+            pStmFlights.setTime(6, java.sql.Time.valueOf(updateFlights.getDepartureTime()));
+            pStmFlights.setTime(7, java.sql.Time.valueOf(updateFlights.getArrivalTime()));
+            pStmFlights.setDate(8, java.sql.Date.valueOf(updateFlights.getFlightDate()));
+            pStmFlights.setString(9, updateFlights.getFlightStatus());
+            pStmFlights.setDate(10, java.sql.Date.valueOf(updateFlights.getArrivalDate()));
+            pStmFlights.setString(11, updateFlights.getGateNumber());
+            pStmFlights.setInt(12, updateFlights.getFlightId());
             
             pStmFlights.executeUpdate();
 
             // Thiết lập các tham số cho câu lệnh UPDATE vào bảng flight_prices
-            pStmPrices.setDouble(1, updateFlights.getEconomyPriceUpdate());
-            pStmPrices.setDouble(2, updateFlights.getBusinessPriceUpdate());
-            pStmPrices.setDouble(3, updateFlights.getFirstClassPriceUpdate());
-            pStmPrices.setInt(4, updateFlights.getFlightIdUpdate());
+            pStmPrices.setDouble(1, updateFlights.getEconomyPrice());
+            pStmPrices.setDouble(2, updateFlights.getBusinessPrice());
+            pStmPrices.setDouble(3, updateFlights.getFirstClassPrice());
+            pStmPrices.setInt(4, updateFlights.getFlightId());
             
             pStmPrices.executeUpdate();
 
@@ -198,7 +196,7 @@ public class AllFlightDAO {
         }
     }
     
-    public void DeleteDB(AllFlights flights) {
+    public void DeleteDB(Flight flights) {
         String deleteFlightPricesSQL = "DELETE FROM flight_prices WHERE flight_id = ?";
         String deleteFlightSQL = "DELETE FROM flights WHERE flight_id = ?";
         
@@ -231,7 +229,7 @@ public class AllFlightDAO {
         }
     }
     
-    public AllFlights getFlightById(int flightId) throws SQLException {
+    public Flight getFlightById(int flightId) throws SQLException {
         String sql = "SELECT f.*, fp.economy_price, fp.business_price, fp.first_class_price, a.airline_name, at.aircraft_type_name "
                 + "FROM flights f "
                 + "JOIN flight_prices fp ON f.flight_id = fp.flight_id "
@@ -245,7 +243,7 @@ public class AllFlightDAO {
             ResultSet rs = pStm.executeQuery();
             
             if (rs.next()) {
-                AllFlights flight = new AllFlights();
+                Flight flight = new Flight();
                 flight.setFlightId(rs.getInt("flight_id"));
                 flight.setFlightNumber(rs.getString("flight_number"));
                 flight.setOriginAirportCode(rs.getString("origin_airport_code"));
