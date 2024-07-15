@@ -530,6 +530,28 @@ public class ProjectController implements Initializable {
             updateFlights.setAircraftTypeName(comboBoxAircraftName.getValue());
             updateFlights.setFlightDate(dpDepartureDate.getValue());
             updateFlights.setArrivalDate(dpArrivalDate.getValue());
+
+            // Kiểm tra chuyến bay trùng giờ và ngày
+            for (Flight flight : allFlightList) {
+                if (!flight.equals(flightsSelected)
+                        && flight.getFlightDate().equals(updateFlights.getFlightDate())
+                        && flight.getDepartureTime().equals(updateFlights.getDepartureTime())
+                        && flight.getArrivalTime().equals(updateFlights.getArrivalTime())) {
+                    showAlert("Duplicate Flight", "There is already a flight at the same time on the same date.");
+                    return;
+                }
+            }
+
+            // Kiểm tra chuyến bay có cùng mã FlightNumber trong ngày
+            for (Flight flight : allFlightList) {
+                if (!flight.equals(flightsSelected)
+                        && flight.getFlightDate().equals(updateFlights.getFlightDate())
+                        && flight.getFlightNumber().equals(updateFlights.getFlightNumber())) {
+                    showAlert("Duplicate Flight Number", "There is already a flight with the same flight number on this date.");
+                    return;
+                }
+            }
+
             updateFlights.setEconomyPrice(Double.parseDouble(txtEconomyPrice.getText()));
             updateFlights.setBusinessPrice(Double.parseDouble(txtBusinessPrice.getText()));
             updateFlights.setFirstClassPrice(Double.parseDouble(txtFirtsClassPice.getText()));
@@ -538,6 +560,7 @@ public class ProjectController implements Initializable {
                 showAlert("Invalid Price", "Giá vé không hợp lệ: Economy phải nhỏ hơn Business và Business phải nhỏ hơn FirstClass");
                 return;
             }
+
             allFlightDAO.EditFlight(updateFlights);
             int index = allFlightList.indexOf(flightsSelected);
             if (index != -1) {
