@@ -216,7 +216,8 @@ public class ProjectController implements Initializable {
     private AnchorPane apButtonAllBooking;
     @FXML
     private DatePicker dpFlightDate;
-
+    @FXML
+    private AnchorPane apFindFlight;
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -491,7 +492,7 @@ public class ProjectController implements Initializable {
 
         try {
             Flight updateFlights = new Flight();
-
+            updateFlights.setFlightId(flightsSelected.getFlightId());
             updateFlights.setFlightNumber(txtFlightNumber.getText());
             updateFlights.setOriginAirportCode(comboBoxOrigin.getValue());
             updateFlights.setDestinationAirportCode(comboBoxDestination.getValue());
@@ -523,6 +524,7 @@ public class ProjectController implements Initializable {
             comboBoxAircraftName.setValue(getAircraftNameById(updateFlights.getAircraftTypeId()));
 
             clearInputFields();
+            apFindFlight.setVisible(true);
             tvFlight.setVisible(true);
             apButonCRUD.setVisible(true);
             apAdd.setVisible(false);
@@ -650,6 +652,7 @@ public class ProjectController implements Initializable {
         apButonCRUD.setVisible(true);
         apAdd.setVisible(false);
         apBooking.setVisible(false);
+        apFindFlight.setVisible(true);
         clearInputFields();
 
     }
@@ -662,7 +665,9 @@ public class ProjectController implements Initializable {
             tvFlight.setVisible(true);
             apButonCRUD.setVisible(true);
             apAdd.setVisible(false);
+            apFindFlight.setVisible(true);
         } else {
+            apFindFlight.setVisible(false);
             tvFlight.setVisible(false);
             apButonCRUD.setVisible(false);
             apAdd.setVisible(true);
@@ -689,6 +694,7 @@ public class ProjectController implements Initializable {
     @FXML
     private void btnHandleChangeAdd(ActionEvent event) {
         tvFlight.setVisible(false);
+        apFindFlight.setVisible(false);
         apButonCRUD.setVisible(false);
         apAdd.setVisible(true);
         btnAdd.setVisible(true);
@@ -709,8 +715,10 @@ public class ProjectController implements Initializable {
                 tvFlight.setVisible(true);
                 apButonCRUD.setVisible(true);
                 apAdd.setVisible(false);
-            } else {
+                apFindFlight.setVisible(true);
 
+            } else {
+                apFindFlight.setVisible(false);
                 tvFlight.setVisible(false);
                 apButonCRUD.setVisible(false);
                 apBooking.setVisible(true);
@@ -887,6 +895,7 @@ public class ProjectController implements Initializable {
         tvFlight.setVisible(false);
         apButonCRUD.setVisible(false);
         apButtonAllBooking.setVisible(true);
+        apFindFlight.setVisible(false);
 
     }
     ObservableList<BookingFlight> allBookingList = FXCollections.observableArrayList(allFlightDAO.getAllBookingDetails());
@@ -925,10 +934,12 @@ public class ProjectController implements Initializable {
         tvFlight.setVisible(true);
         apButonCRUD.setVisible(true);
         apButtonAllBooking.setVisible(false);
+        apFindFlight.setVisible(true);
     }
 
     @FXML
     private void btnDetailAllBooking(ActionEvent event) {
+
     }
 
     @FXML

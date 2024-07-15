@@ -273,7 +273,7 @@
             <Button fx:id="btnBackAllBooking" layoutX="28.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnHandleBackAllBooking" text="Back" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="84.0" layoutY="434.0" prefHeight="184.0" prefWidth="617.0">
+      <AnchorPane fx:id="apFindFlight" layoutX="84.0" layoutY="434.0" prefHeight="184.0" prefWidth="617.0">
          <children>
             <DatePicker fx:id="dpFlightDate" layoutX="130.0" layoutY="102.0" onAction="#dpHandleFlightDate" />
             <Text layoutX="35.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FlightDate" />
