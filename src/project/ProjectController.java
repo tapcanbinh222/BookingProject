@@ -19,8 +19,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -105,6 +107,16 @@ public class ProjectController implements Initializable {
     @FXML
     private ComboBox<String> comboBoxOrigin;
     @FXML
+    private ComboBox<String> comboBoxGender;
+    @FXML
+    private ComboBox<String> comboBoxNational;
+    @FXML
+    private ComboBox<String> comboBoxSeatType;
+    @FXML
+    private ComboBox<String> comboBoxSeat;
+    @FXML
+    private ComboBox<String> comboBoxFlightStatus;
+    @FXML
     private Button btnchangeUpdate;
     @FXML
     private Button btnChangeAdd;
@@ -136,14 +148,6 @@ public class ProjectController implements Initializable {
     private Button btnBooking;
     @FXML
     private DatePicker dpDOB;
-    @FXML
-    private ComboBox<String> comboBoxGender;
-    @FXML
-    private ComboBox<String> comboBoxNational;
-    @FXML
-    private ComboBox<String> comboBoxSeatType;
-    @FXML
-    private ComboBox<String> comboBoxSeat;
     @FXML
     private TextField txtFirstName;
     @FXML
@@ -212,8 +216,7 @@ public class ProjectController implements Initializable {
     private AnchorPane apButtonAllBooking;
     @FXML
     private DatePicker dpFlightDate;
-    @FXML
-    private ComboBox<String> comboBoxFlightStatus;
+
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -263,35 +266,16 @@ public class ProjectController implements Initializable {
         comboBoxSeatType.valueProperty().addListener((observable, oldValue, newValue) -> {
             filterSeatsByType(newValue);
         });
-
-        comboBoxOrigin.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (!isChecking) { // Chỉ kiểm tra khi không đang trong quá trình kiểm tra
-                isChecking = true;
-                checkOriginAndDestination();
-                isChecking = false;
-            }
-        });
-        comboBoxDestination.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (!isChecking) {
-                isChecking = true;
-                checkOriginAndDestination();
-                isChecking = false;
-            }
-        });
-        dpFlightDate.setOnAction(this::filterFlightsByDate);
-        comboBoxAircraftName.setValue("Choose Aircraft");
+        comboBoxOrigin.valueProperty().addListener((obs, oldVal, newVal) -> checkOriginAndDestination());
+        comboBoxDestination.valueProperty().addListener((obs, oldVal, newVal) -> checkOriginAndDestination());
         comboBoxAircraftName.setItems(options);
-        comboBoxAirlineName.setValue("Choose Airline");
         comboBoxAirlineName.setItems(optionsAirlineName);
-        comboBoxOrigin.setValue("Origin");
         comboBoxOrigin.setItems(optionsOrigin);
-        comboBoxDestination.setValue("Destination");
         comboBoxDestination.setItems(optionsDestination);
         comboBoxGender.setItems(optionsGender);
         comboBoxNational.setItems(optionsNational);
         comboBoxSeatType.setItems(optionsSeatType);
         comboBoxFlightStatus.setItems(optionsFlightStatus);
-        comboBoxFlightStatus.setValue("Status Flight");
 
     }
 
@@ -322,21 +306,6 @@ public class ProjectController implements Initializable {
 
     }
 
-    private void filterFlightsByDate(ActionEvent event) {
-        LocalDate selectedDate = dpFlightDate.getValue();
-        if (selectedDate != null) {
-            ObservableList<Flight> filteredFlights = FXCollections.observableArrayList();
-            for (Flight flight : allFlightList) {
-                if (flight.getFlightDate().equals(selectedDate)) {
-                    filteredFlights.add(flight);
-                }
-            }
-            tvFlight.setItems(filteredFlights);
-        } else {
-            tvFlight.setItems(allFlightList);
-        }
-    }
-
     @FXML
     private void btnHandleAdd(ActionEvent event) {
         AllFlightDAO dao = new AllFlightDAO();
@@ -363,7 +332,6 @@ public class ProjectController implements Initializable {
             return;
         }
 
-        // Check if origin and destination are the same
         if (comboBoxOrigin.getValue().equals(comboBoxDestination.getValue())) {
             showAlert("Invalid Input", "Origin and Destination cannot be the same.");
             return;
@@ -414,10 +382,15 @@ public class ProjectController implements Initializable {
             add.setAircraftTypeName(selectedAircraft);
             add.setFlightDate(dpDepartureDate.getValue());
             add.setArrivalDate(dpArrivalDate.getValue());
+
             add.setEconomyPrice(Double.parseDouble(txtEconomyPrice.getText()));
             add.setBusinessPrice(Double.parseDouble(txtBusinessPrice.getText()));
             add.setFirstClassPrice(Double.parseDouble(txtFirtsClassPice.getText()));
-
+            if (add.getEconomyPrice() > add.getBusinessPrice()
+                    || add.getBusinessPrice() > add.getFirstClassPrice()) {
+                showAlert("Invalid Price", "Giá vé không hợp lệ: Economy phải nhỏ hơn Business và Business phải nhỏ hơn FirstClass");
+                return;
+            }
             dao.AddDB(add);
             allFlightList.add(add);
             tvFlight.setVisible(true);
@@ -450,23 +423,9 @@ public class ProjectController implements Initializable {
             if (comboBoxOrigin.getValue().equals(comboBoxDestination.getValue())) {
                 showAlert("Invalid Input", "Origin and Destination cannot be the same.");
 
-                Platform.runLater(() -> {
-                    // Kiểm tra và thêm "Origin" vào optionsOrigin nếu cần
-                    if (!optionsOrigin.contains("Origin")) {
-                        optionsOrigin.add("Origin");
-                    }
-                    comboBoxOrigin.setValue("Origin");
-
-                    // Kiểm tra và thêm "Destination" vào optionsDestination nếu cần
-                    if (!optionsDestination.contains("Destination")) {
-                        optionsDestination.add("Destination");
-                    }
-                    comboBoxDestination.setValue("Destination");
-                });
             }
         }
     }
-    
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -549,14 +508,16 @@ public class ProjectController implements Initializable {
             updateFlights.setEconomyPrice(Double.parseDouble(txtEconomyPrice.getText()));
             updateFlights.setBusinessPrice(Double.parseDouble(txtBusinessPrice.getText()));
             updateFlights.setFirstClassPrice(Double.parseDouble(txtFirtsClassPice.getText()));
-
+            if (updateFlights.getEconomyPrice() > updateFlights.getBusinessPrice()
+                    || updateFlights.getBusinessPrice() > updateFlights.getFirstClassPrice()) {
+                showAlert("Invalid Price", "Giá vé không hợp lệ: Economy phải nhỏ hơn Business và Business phải nhỏ hơn FirstClass");
+                return;
+            }
             allFlightDAO.EditFlight(updateFlights);
             int index = allFlightList.indexOf(flightsSelected);
             if (index != -1) {
                 allFlightList.set(index, updateFlights);
             }
-            tvFlight.refresh();
-
             // Set ComboBox values after update
             comboBoxAirlineName.setValue(getAirlineNameById(updateFlights.getAirlineId()));
             comboBoxAircraftName.setValue(getAircraftNameById(updateFlights.getAircraftTypeId()));
@@ -642,17 +603,18 @@ public class ProjectController implements Initializable {
         txtFlightNumber.setEditable(true); // Cho phép chỉnh sửa mã chuyến bay khi thêm mới
         txtDepartureTime.clear();
         txtArrivalTime.clear();
-        comboBoxFlightStatus.setValue(null);
+        comboBoxFlightStatus.setValue("Status");
         txtGateNumber.clear();
         txtEconomyPrice.clear();
         txtBusinessPrice.clear();
         txtFirtsClassPice.clear();
         dpArrivalDate.setValue(null);
         dpDepartureDate.setValue(null);
-        comboBoxOrigin.setValue(null);
-        comboBoxDestination.setValue(null);
-        comboBoxAirlineName.setValue(null);
-        comboBoxAircraftName.setValue(null);
+        comboBoxAirlineName.setValue("Airline Name");
+        comboBoxAircraftName.setValue("AircraftName");
+        comboBoxOrigin.setPromptText("Origin");
+        comboBoxDestination.setPromptText("Destination");
+
     }
 
     @FXML
@@ -670,9 +632,7 @@ public class ProjectController implements Initializable {
                 // Xóa sản phẩm khỏi cơ sở dữ liệu
                 dao.DeleteDB(flightSelected);
 
-                // Xóa sản phẩm khỏi danh sách prolist
                 allFlightList.remove(flightSelected);
-                tvFlight.refresh();
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -691,6 +651,7 @@ public class ProjectController implements Initializable {
         apAdd.setVisible(false);
         apBooking.setVisible(false);
         clearInputFields();
+
     }
 
     @FXML
@@ -732,7 +693,8 @@ public class ProjectController implements Initializable {
         apAdd.setVisible(true);
         btnAdd.setVisible(true);
         btnUpdate.setVisible(false);
-
+        comboBoxOrigin.setValue("Origin");
+        comboBoxDestination.setValue("Destination");
     }
 
     // In ra danh sách ObservableList
@@ -752,7 +714,6 @@ public class ProjectController implements Initializable {
                 tvFlight.setVisible(false);
                 apButonCRUD.setVisible(false);
                 apBooking.setVisible(true);
-
                 txtGetFlightNumber.setText(flightsSelected.getFlightNumber());
                 txtGetFlightNumber.setEditable(false);
                 txtGetOrigin.setText(flightsSelected.getOriginAirportCode());
@@ -973,6 +934,47 @@ public class ProjectController implements Initializable {
     @FXML
     private void dpHandleFlightDate(ActionEvent event) {
 
+    }
+    private ObservableList<Flight> filteredFlightList = FXCollections.observableArrayList();
+
+    @FXML
+    private void btnFind(ActionEvent event) {
+
+        LocalDate flightDate = dpFlightDate.getValue();
+        String origin = comboBoxOrigin.getValue();
+        String destination = comboBoxDestination.getValue();
+
+        // Kiểm tra đầu vào
+        if (flightDate == null || origin == null || destination == null || origin.isEmpty() || destination.isEmpty()) {
+            showAlert("Invalid Input", "Please fill in all fields.");
+            return;
+        }
+
+        // Tìm kiếm trong danh sách chuyến bay
+        filteredFlightList.clear();
+        for (Flight flight : allFlightList) {
+            if (flight.getFlightDate().equals(flightDate)
+                    && flight.getOriginAirportCode().equals(origin)
+                    && flight.getDestinationAirportCode().equals(destination)) {
+                filteredFlightList.add(flight);
+            }
+        }
+
+        // Cập nhật bảng hiển thị
+        tvFlight.setItems(filteredFlightList);
+
+        // Kiểm tra kết quả tìm kiếm
+        if (filteredFlightList.isEmpty()) {
+            showAlertINFORMATION("No Results", "No flights found for the given criteria.");
+        }
+    }
+
+    private void showAlertINFORMATION(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
 }
