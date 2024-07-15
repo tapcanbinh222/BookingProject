@@ -19,60 +19,60 @@
             <TableView fx:id="tvFlight" editable="true" prefHeight="417.0" prefWidth="1182.0">
                <columns>
                   <TableColumn fx:id="tcFlightNumber" prefWidth="69.0" sortType="DESCENDING" text="FlightNumber" />
+                  <TableColumn fx:id="tcAirlineName" prefWidth="97.0" text="Airline_name" />
+                  <TableColumn fx:id="tcFlightStatus" prefWidth="64.0" text="FlightStatus" />
                   <TableColumn fx:id="tcOrigin" prefWidth="56.0" text="Origin" />
                   <TableColumn fx:id="tcDestination" prefWidth="49.0" text="Destination" />
-                  <TableColumn fx:id="tcFlightStatus" prefWidth="64.0" text="FlightStatus" />
                   <TableColumn fx:id="tcDepartureTime" prefWidth="123.0" text="DepartureTime" />
                   <TableColumn fx:id="tcArrivalTime" prefWidth="70.0" text="ArrivalTime" />
                   <TableColumn fx:id="tcFlightDate" text="FlightDate" />
                   <TableColumn fx:id="tcArrivalDate" prefWidth="93.0" text="Arival Date" />
-                  <TableColumn fx:id="tcAirlineName" prefWidth="97.0" text="Airline_name" />
                   <TableColumn fx:id="tcAircraftType" prefWidth="138.0" text="Aircraft Type" />
-                  <TableColumn fx:id="tcGateNumber" prefWidth="71.0" text="Gate Number" />
                   <TableColumn fx:id="tcEconomyPrice" minWidth="0.0" prefWidth="71.0" text="EconomyPrice" />
                   <TableColumn fx:id="tcBusinessPrice" minWidth="0.0" prefWidth="84.0" text="BusinessPrice" />
                   <TableColumn fx:id="tcFirstClassPrice" minWidth="0.0" prefWidth="116.0" text="FirstClassPrice" />
+                  <TableColumn fx:id="tcGateNumber" prefWidth="71.0" text="Gate Number" />
                </columns>
             </TableView>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apAdd" layoutX="7.0" layoutY="14.0" prefHeight="546.0" prefWidth="1164.0" visible="false">
+      <AnchorPane fx:id="apAdd" layoutX="7.0" layoutY="14.0" prefHeight="610.0" prefWidth="1164.0" visible="false">
          <children>
-            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="462.0" lineSpacing="2.0" text="Business Price" textAlignment="CENTER" />
+            <Label alignment="TOP_LEFT" layoutX="22.0" layoutY="488.0" lineSpacing="2.0" text="Business Price" textAlignment="CENTER" />
             <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="59.0" lineSpacing="2.0" text="Flight Number" textAlignment="CENTER" />
             <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="106.0" lineSpacing="2.0" text="Origin">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </Label>
-            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="376.0" lineSpacing="2.0" text="Aircraft Name" textAlignment="CENTER" />
+            <Label alignment="TOP_LEFT" layoutX="19.0" layoutY="392.0" lineSpacing="2.0" text="Aircraft Name" textAlignment="CENTER" />
             <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="145.0" lineSpacing="2.0" text="Destination" textAlignment="CENTER" />
             <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="183.0" lineSpacing="2.0" text="Departure Time" textAlignment="CENTER" />
             <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="224.0" lineSpacing="2.0" text="Arrival Time" textAlignment="CENTER" />
-            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="291.0" lineSpacing="2.0" text="Flight Status" textAlignment="CENTER" />
-            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="333.0" lineSpacing="2.0" text="Gate Number" textAlignment="CENTER" />
-            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="418.0" lineSpacing="2.0" text="Economy Price" textAlignment="CENTER" />
-            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="499.0" lineSpacing="2.0" text="Firtclass class Price" textAlignment="CENTER" />
+            <Label alignment="TOP_LEFT" layoutX="19.0" layoutY="302.0" lineSpacing="2.0" text="Flight Status" textAlignment="CENTER" />
+            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="344.0" lineSpacing="2.0" text="Gate Number" textAlignment="CENTER" />
+            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="444.0" lineSpacing="2.0" text="Economy Price" textAlignment="CENTER" />
+            <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="530.0" lineSpacing="2.0" text="Firtclass class Price" textAlignment="CENTER" />
             <Label alignment="TOP_LEFT" layoutX="20.0" layoutY="260.0" lineSpacing="2.0" prefHeight="21.0" prefWidth="86.0" text="Airline Name" textAlignment="CENTER" />
-            <ComboBox fx:id="comboBoxAircraftName" layoutX="180.0" layoutY="371.0" prefWidth="150.0" />
+            <ComboBox fx:id="comboBoxAircraftName" layoutX="180.0" layoutY="387.0" prefWidth="150.0" />
             <TextField fx:id="txtFlightNumber" layoutX="180.0" layoutY="54.0" />
             <TextField fx:id="txtDepartureTime" layoutX="180.0" layoutY="178.0" />
             <TextField fx:id="txtArrivalTime" layoutX="180.0" layoutY="219.0" />
-            <TextField fx:id="txtFlightStatus" layoutX="180.0" layoutY="286.0" />
-            <TextField fx:id="txtGateNumber" layoutX="180.0" layoutY="328.0" />
-            <TextField fx:id="txtEconomyPrice" layoutX="180.0" layoutY="413.0" />
-            <TextField fx:id="txtFirtsClassPice" layoutX="180.0" layoutY="494.0" />
+            <TextField fx:id="txtGateNumber" layoutX="180.0" layoutY="339.0" />
+            <TextField fx:id="txtEconomyPrice" layoutX="180.0" layoutY="439.0" />
+            <TextField fx:id="txtFirtsClassPice" layoutX="180.0" layoutY="525.0" />
             <DatePicker fx:id="dpArrivalDate" layoutX="801.0" layoutY="130.0" />
             <Label alignment="TOP_LEFT" layoutX="651.0" layoutY="91.0" lineSpacing="2.0" text="Departure Date" textAlignment="CENTER" />
             <Label alignment="TOP_LEFT" layoutX="651.0" layoutY="130.0" lineSpacing="2.0" text="Arrival Date" textAlignment="CENTER" />
             <DatePicker fx:id="dpDepartureDate" layoutX="801.0" layoutY="86.0" />
-            <TextField fx:id="txtBusinessPrice" layoutX="180.0" layoutY="457.0" />
+            <TextField fx:id="txtBusinessPrice" layoutX="180.0" layoutY="483.0" />
             <ComboBox fx:id="comboBoxDestination" layoutX="180.0" layoutY="136.0" prefWidth="150.0" />
-            <Button fx:id="btnUpdate" contentDisplay="CENTER" layoutX="521.0" layoutY="494.0" mnemonicParsing="false" onAction="#btnHandleUpdate" text="Update" textAlignment="CENTER" />
+            <Button fx:id="btnUpdate" contentDisplay="CENTER" layoutX="767.0" layoutY="525.0" mnemonicParsing="false" onAction="#btnHandleUpdate" text="Update" textAlignment="CENTER" />
             <ComboBox fx:id="comboBoxOrigin" layoutX="180.0" layoutY="97.0" prefWidth="150.0" />
             <ComboBox fx:id="comboBoxAirlineName" layoutX="180.0" layoutY="255.0" prefWidth="150.0" />
             <Button fx:id="btnBack" layoutX="20.0" layoutY="15.0" mnemonicParsing="false" onAction="#btnHandleBack" text="Back" />
-            <Button fx:id="btnAdd" contentDisplay="CENTER" layoutX="613.0" layoutY="494.0" mnemonicParsing="false" onAction="#btnHandleAdd" text="Add" textAlignment="CENTER" />
+            <Button fx:id="btnAdd" contentDisplay="CENTER" layoutX="862.0" layoutY="525.0" mnemonicParsing="false" onAction="#btnHandleAdd" text="Add" textAlignment="CENTER" />
+            <ComboBox fx:id="comboBoxFlightStatus" layoutX="180.0" layoutY="297.0" prefWidth="150.0" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="apButonCRUD" layoutX="53.0" layoutY="423.0" prefHeight="111.0" prefWidth="445.0">
