@@ -226,6 +226,34 @@ public class AllFlightDAO {
         }
     }
 
+    public void CancelledFlight(Flight flights) {
+        String deleteFlightSQL = "Update flights set flight_status = 'CANCELLED' WHERE flight_id = ?";
+
+        try (Connection cn = connect.GetConnectDB(); PreparedStatement deleteFlightStmt = cn.prepareStatement(deleteFlightSQL)) {
+
+            // Bắt đầu một giao dịch
+            cn.setAutoCommit(false);
+
+            // Xóa dữ liệu từ bảng flights
+            deleteFlightStmt.setInt(1, flights.getFlightId());
+            deleteFlightStmt.executeUpdate();
+
+            // Commit giao dịch
+            cn.commit();
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+            try {
+                if (cn != null) {
+                    cn.rollback(); // Rollback giao dịch nếu có lỗi
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     public Flight getFlightById(int flightId) throws SQLException {
         String sql = "SELECT f.*, fp.economy_price, fp.business_price, fp.first_class_price, a.airline_name, at.aircraft_type_name "
                 + "FROM flights f "
@@ -450,7 +478,8 @@ public class AllFlightDAO {
         }
         return bookingList;
     }
- public List<BookingFlight> getAllBookingDetailsDelayed() {
+
+    public List<BookingFlight> getAllBookingDetailsDelayed() {
         List<BookingFlight> bookingList = new ArrayList<>();
         String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, "
                 + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name "

@@ -75,7 +75,7 @@
             <ComboBox fx:id="comboBoxFlightStatus" layoutX="180.0" layoutY="297.0" prefWidth="150.0" promptText="Status" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apButonCRUD" layoutX="728.0" layoutY="579.0" prefHeight="111.0" prefWidth="445.0">
+      <AnchorPane fx:id="apButonCRUD" layoutX="719.0" layoutY="526.0" prefHeight="111.0" prefWidth="445.0">
          <children>
             <Button fx:id="btnChangeBooking" contentDisplay="CENTER" layoutX="346.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeBooking" text="Booking" textAlignment="CENTER" />
             <Button fx:id="btnchangeUpdate" contentDisplay="CENTER" layoutX="158.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnChangeUpdate" text="Update" textAlignment="CENTER" />

@@ -665,27 +665,32 @@ public class ProjectController implements Initializable {
     private void btnHandleDelete(ActionEvent event) {
         Flight flightSelected = tvFlight.getSelectionModel().getSelectedItem();
         AllFlightDAO dao = new AllFlightDAO();
+
         if (flightSelected != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("Delete Product");
-            alert.setContentText("Are you sure you want to delete the product: " + flightSelected.getFlightId() + "?");
+            alert.setHeaderText("Cancel Flight");
+            alert.setContentText("Are you sure you want to cancel the flight: " + flightSelected.getFlightId() + "?");
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                // Xóa sản phẩm khỏi cơ sở dữ liệu
-                dao.DeleteDB(flightSelected);
+                // Đặt trạng thái chuyến bay thành "Cancelled"
+                flightSelected.setFlightStatus("Cancelled");
+                dao.CancelledFlight(flightSelected);
 
-                allFlightList.remove(flightSelected);
+                int index = allFlightList.indexOf(flightSelected);
+                if (index != -1) {
+                    allFlightList.set(index, flightSelected);
+                }
+                showAlert("Success", "Flight cancelled successfully.");
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Warning Dialog");
             alert.setHeaderText("No Selection");
-            alert.setContentText("Please select a product in the table.");
+            alert.setContentText("Please select a flight in the table.");
             alert.showAndWait();
         }
-
     }
 
     @FXML
