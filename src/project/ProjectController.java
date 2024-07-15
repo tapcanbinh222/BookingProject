@@ -18,11 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -79,7 +76,21 @@ public class ProjectController implements Initializable {
     @FXML
     private Button btnBack;
     @FXML
-    ComboBox<String> comboBoxAircraftName;
+    private Button btnchangeUpdate;
+    @FXML
+    private Button btnChangeAdd;
+    @FXML
+    private Button btnBack1;
+    @FXML
+    private Button btnBooking;
+    @FXML
+    private Button btnBackAllBooking;
+    @FXML
+    private Button btnDetailAllBooking;
+    @FXML
+    private Button btnChangeBooking;
+    @FXML
+    private Button btnchangeAllBooking;
     @FXML
     private TextField txtFlightNumber;
     @FXML
@@ -93,13 +104,25 @@ public class ProjectController implements Initializable {
     @FXML
     private TextField txtFirtsClassPice;
     @FXML
+    private TextField txtBusinessPrice;
+    @FXML
     private DatePicker dpArrivalDate;
     @FXML
     private DatePicker dpDepartureDate;
     @FXML
-    private TextField txtBusinessPrice;
+    private AnchorPane apPassengerFlight;
+    @FXML
+    private AnchorPane apButtonAllBooking;
+    @FXML
+    private AnchorPane apFindFlight;
     @FXML
     private AnchorPane apAdd;
+    @FXML
+    private AnchorPane apButonCRUD;
+    @FXML
+    private AnchorPane apBooking;
+    @FXML
+    private ComboBox<String> comboBoxAircraftName;
     @FXML
     private ComboBox<String> comboBoxAirlineName;
     @FXML
@@ -117,14 +140,6 @@ public class ProjectController implements Initializable {
     @FXML
     private ComboBox<String> comboBoxFlightStatus;
     @FXML
-    private Button btnchangeUpdate;
-    @FXML
-    private Button btnChangeAdd;
-    @FXML
-    private AnchorPane apButonCRUD;
-    @FXML
-    private AnchorPane apBooking;
-    @FXML
     private Label lbBusinessPrice;
     @FXML
     private Label lbEconomyPrice;
@@ -139,23 +154,17 @@ public class ProjectController implements Initializable {
     @FXML
     private TextField txtGetFlightStatus;
     @FXML
+    private DatePicker dpFlightDate;
+    @FXML
     private DatePicker dpGetDepartureDate;
     @FXML
     private TextField txtGetBusinessPrice;
-    @FXML
-    private Button btnBack1;
-    @FXML
-    private Button btnBooking;
     @FXML
     private DatePicker dpDOB;
     @FXML
     private TextField txtFirstName;
     @FXML
     private TextField txtLastName;
-    @FXML
-    private Button btnChangeBooking;
-    @FXML
-    private Button btnchangeAllBooking;
     @FXML
     private TextField txtGetFirtsClassPrice;
     @FXML
@@ -206,18 +215,7 @@ public class ProjectController implements Initializable {
     private TextField txtPhone;
     @FXML
     private TextField txtEmail;
-    @FXML
-    private AnchorPane apPassengerFlight;
-    @FXML
-    private Button btnBackAllBooking;
-    @FXML
-    private Button btnDetailAllBooking;
-    @FXML
-    private AnchorPane apButtonAllBooking;
-    @FXML
-    private DatePicker dpFlightDate;
-    @FXML
-    private AnchorPane apFindFlight;
+
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -571,11 +569,6 @@ public class ProjectController implements Initializable {
             default:
                 return null;
         }
-    }
-
-    private boolean isAirlineIdValid(int airlineId) {
-        // Kiểm tra tính hợp lệ của airlineId
-        return airlineId != 0;
     }
 
     private int getAircraftTypeIdByName(String aircraftName) {
