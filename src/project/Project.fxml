@@ -279,8 +279,8 @@
             <Text layoutX="35.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FlightDate" />
             <Text layoutX="35.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Origin" />
             <Text layoutX="280.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Destination" />
-            <ComboBox fx:id="comboBoxOrigin" layoutX="103.0" layoutY="37.0" prefWidth="150.0" promptText="Origin" />
-            <ComboBox fx:id="comboBoxDestination" layoutX="385.0" layoutY="37.0" prefWidth="150.0" promptText="Destination" />
+            <ComboBox fx:id="comboBoxOriginFind" layoutX="103.0" layoutY="37.0" prefWidth="150.0" promptText="Origin" />
+            <ComboBox fx:id="comboBoxDestinationFind" layoutX="385.0" layoutY="37.0" prefWidth="150.0" promptText="Destination" />
             <Button layoutX="385.0" layoutY="101.0" mnemonicParsing="false" onAction="#btnFind" text="Find" />
          </children>
       </AnchorPane>

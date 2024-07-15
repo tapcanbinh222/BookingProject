@@ -130,6 +130,10 @@ public class ProjectController implements Initializable {
     @FXML
     private ComboBox<String> comboBoxOrigin;
     @FXML
+    private ComboBox<String> comboBoxDestinationFind;
+    @FXML
+    private ComboBox<String> comboBoxOriginFind;
+    @FXML
     private ComboBox<String> comboBoxGender;
     @FXML
     private ComboBox<String> comboBoxNational;
@@ -271,6 +275,8 @@ public class ProjectController implements Initializable {
         comboBoxAirlineName.setItems(optionsAirlineName);
         comboBoxOrigin.setItems(optionsOrigin);
         comboBoxDestination.setItems(optionsDestination);
+        comboBoxOriginFind.setItems(optionsOrigin);
+        comboBoxDestinationFind.setItems(optionsDestination);
         comboBoxGender.setItems(optionsGender);
         comboBoxNational.setItems(optionsNational);
         comboBoxSeatType.setItems(optionsSeatType);
@@ -342,6 +348,27 @@ public class ProjectController implements Initializable {
             add.setOriginAirportCode(comboBoxOrigin.getValue());
             add.setDepartureTime(LocalTime.parse(txtDepartureTime.getText()));
             add.setArrivalTime(LocalTime.parse(txtArrivalTime.getText()));
+            add.setFlightDate(dpDepartureDate.getValue());
+            add.setArrivalDate(dpArrivalDate.getValue());
+
+            // Kiểm tra chuyến bay trùng giờ và ngày
+            for (Flight flight : allFlightList) {
+                if (flight.getFlightDate().equals(add.getFlightDate())
+                        && flight.getDepartureTime().equals(add.getDepartureTime())
+                        && flight.getArrivalTime().equals(add.getArrivalTime())) {
+                    showAlert("Duplicate Flight", "There is already a flight at the same time on the same date.");
+                    return;
+                }
+            }
+
+            // Kiểm tra chuyến bay có cùng mã FlightNumber trong ngày
+            for (Flight flight : allFlightList) {
+                if (flight.getFlightDate().equals(add.getFlightDate())
+                        && flight.getFlightNumber().equals(add.getFlightNumber())) {
+                    showAlert("Duplicate Flight Number", "There is already a flight with the same flight number on this date.");
+                    return;
+                }
+            }
 
             String selectedAirlineNames = comboBoxAirlineName.getValue();
             int airlineId;
@@ -379,8 +406,6 @@ public class ProjectController implements Initializable {
             }
             add.setAircraftTypeId(aircraftTypeId);
             add.setAircraftTypeName(selectedAircraft);
-            add.setFlightDate(dpDepartureDate.getValue());
-            add.setArrivalDate(dpArrivalDate.getValue());
 
             add.setEconomyPrice(Double.parseDouble(txtEconomyPrice.getText()));
             add.setBusinessPrice(Double.parseDouble(txtBusinessPrice.getText()));
@@ -390,6 +415,7 @@ public class ProjectController implements Initializable {
                 showAlert("Invalid Price", "Giá vé không hợp lệ: Economy phải nhỏ hơn Business và Business phải nhỏ hơn FirstClass");
                 return;
             }
+
             dao.AddDB(add);
             allFlightList.add(add);
             tvFlight.setVisible(true);
@@ -945,8 +971,8 @@ public class ProjectController implements Initializable {
     private void btnFind(ActionEvent event) {
 
         LocalDate flightDate = dpFlightDate.getValue();
-        String origin = comboBoxOrigin.getValue();
-        String destination = comboBoxDestination.getValue();
+        String origin = comboBoxOriginFind.getValue();
+        String destination = comboBoxDestinationFind.getValue();
 
         // Kiểm tra đầu vào
         if (flightDate == null || origin == null || destination == null || origin.isEmpty() || destination.isEmpty()) {
