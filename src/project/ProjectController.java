@@ -75,11 +75,11 @@ public class ProjectController implements Initializable {
     @FXML
     private Button btnUpdate;
     @FXML
-    private Button btnDelete;
+    private MenuItem btnDelete;
     @FXML
     private Button btnBack;
     @FXML
-    private Button btnchangeUpdate;
+    private MenuItem btnchangeUpdate;
     @FXML
     private Button btnChangeAdd;
     @FXML
@@ -91,7 +91,7 @@ public class ProjectController implements Initializable {
     @FXML
     private Button btnDetailAllBooking;
     @FXML
-    private Button btnChangeBooking;
+    private MenuItem btnChangeBooking;
     @FXML
     private Button btnchangeAllBooking;
     @FXML
@@ -283,6 +283,7 @@ public class ProjectController implements Initializable {
         comboBoxDestination.valueProperty().addListener((obs, oldVal, newVal) -> checkOriginAndDestination());
         flightDelayed.setOnAction(this::handleFlightDelayed);
         flightCancelled.setOnAction(this::handleFlightCancelled);
+        flightScheduled.setOnAction(this::handleFlightScheduled);
         comboBoxAircraftName.setItems(options);
         comboBoxAirlineName.setItems(optionsAirlineName);
         comboBoxOrigin.setItems(optionsOrigin);
@@ -681,13 +682,13 @@ public class ProjectController implements Initializable {
         if (flightSelected != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("Cancel Flight");
-            alert.setContentText("Are you sure you want to cancel the flight: " + flightSelected.getFlightId() + "?");
+            alert.setHeaderText("CANCELLED Flight");
+            alert.setContentText("Are you sure you want to CANCELLED the flight FN : "  + flightSelected.getFlightNumber() +"?");
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 // Đặt trạng thái chuyến bay thành "Cancelled"
-                flightSelected.setFlightStatus("Cancelled");
+                flightSelected.setFlightStatus("CANCELLED");
                 dao.CancelledFlight(flightSelected);
 
                 int index = allFlightList.indexOf(flightSelected);
@@ -717,7 +718,7 @@ public class ProjectController implements Initializable {
     }
 
     @FXML
-    private void btnChangeUpdate(ActionEvent event) {
+    private void btnHandleChangeUpdate(ActionEvent event) {
         Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
         if (flightsSelected == null) {
             showAlert("Error", "No flight selected.");
@@ -1068,7 +1069,7 @@ public class ProjectController implements Initializable {
         ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
         tvFlight.setItems(cancelledFlightList);
 
-        showAlert("Flight Cancelled", "Displaying DELAYED flights.");
+        showAlert("Flight DELAYED", "Displaying DELAYED flights.");
     }
 
     @FXML
@@ -1080,7 +1081,7 @@ public class ProjectController implements Initializable {
         ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
         tvFlight.setItems(cancelledFlightList);
 
-        showAlert("Flight Cancelled", "Displaying SCHEDULED flights.");
+        showAlert("Flight SCHEDULED", "Displaying SCHEDULED flights.");
     }
 
 }

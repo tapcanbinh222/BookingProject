@@ -42,6 +42,7 @@
                   <MenuItem fx:id="flightCancelled" mnemonicParsing="false" onAction="#handleFlightCancelled" text="Cancelled" />
                   <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Delayed" />
                </items></SplitMenuButton>
+            <Button fx:id="btnChangeAdd" contentDisplay="CENTER" layoutX="179.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeAdd" text="Add" textAlignment="CENTER" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="apAdd" layoutX="7.0" layoutY="14.0" prefHeight="610.0" prefWidth="1164.0" visible="false">
@@ -85,11 +86,14 @@
       </AnchorPane>
       <AnchorPane fx:id="apButonCRUD" layoutX="719.0" layoutY="526.0" prefHeight="111.0" prefWidth="445.0">
          <children>
-            <Button fx:id="btnChangeBooking" contentDisplay="CENTER" layoutX="346.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeBooking" text="Booking" textAlignment="CENTER" />
-            <Button fx:id="btnchangeUpdate" contentDisplay="CENTER" layoutX="158.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnChangeUpdate" text="Update" textAlignment="CENTER" />
-            <Button fx:id="btnDelete" contentDisplay="CENTER" layoutX="79.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleDelete" text="Delete" textAlignment="CENTER" />
-            <Button fx:id="btnChangeAdd" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeAdd" text="Add" textAlignment="CENTER" />
             <Button fx:id="btnchangeAllBooking" contentDisplay="CENTER" layoutX="236.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandlechangeAllBooking" text="All Booking" textAlignment="CENTER" />
+            <SplitMenuButton layoutX="21.0" layoutY="14.0" mnemonicParsing="false" text="SplitMenuButton">
+              <items>
+                <MenuItem fx:id="btnDelete" mnemonicParsing="false" onAction="#btnHandleDelete" text="Cancelled" />
+                <MenuItem fx:id="btnchangeUpdate" mnemonicParsing="false" onAction="#btnHandleChangeUpdate" text="Update" />
+                  <MenuItem fx:id="btnChangeBooking" mnemonicParsing="false" onAction="#btnHandleChangeBooking" text="Booking" />
+              </items>
+            </SplitMenuButton>
          </children>
          <opaqueInsets>
             <Insets top="150.0" />
