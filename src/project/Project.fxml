@@ -24,22 +24,22 @@
                   <MenuItem fx:id="flightCancelled" mnemonicParsing="false" onAction="#handleFlightCancelled" text="Cancelled" />
                   <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Delayed" />
                </items></SplitMenuButton>
-            <TableView fx:id="tvFlight" editable="true" layoutX="103.0" layoutY="68.0" prefHeight="453.0" prefWidth="1000.0">
+            <TableView fx:id="tvFlight" editable="true" layoutX="96.0" layoutY="85.0" prefHeight="453.0" prefWidth="948.0">
                <columns>
                   <TableColumn fx:id="tcFlightNumber" prefWidth="69.0" sortType="DESCENDING" text="FlightNumber" />
                   <TableColumn fx:id="tcAirlineName" prefWidth="97.0" text="Airline_name" />
                   <TableColumn fx:id="tcFlightStatus" prefWidth="64.0" text="FlightStatus" />
                   <TableColumn fx:id="tcOrigin" prefWidth="56.0" text="Origin" />
                   <TableColumn fx:id="tcDestination" prefWidth="49.0" text="Destination" />
-                  <TableColumn fx:id="tcDepartureTime" prefWidth="123.0" text="DepartureTime" />
-                  <TableColumn fx:id="tcArrivalTime" prefWidth="70.0" text="ArrivalTime" />
-                  <TableColumn fx:id="tcFlightDate" text="FlightDate" />
-                  <TableColumn fx:id="tcArrivalDate" prefWidth="93.0" text="Arival Date" />
-                  <TableColumn fx:id="tcAircraftType" prefWidth="138.0" text="Aircraft Type" />
-                  <TableColumn fx:id="tcEconomyPrice" minWidth="0.0" prefWidth="71.0" text="EconomyPrice" />
-                  <TableColumn fx:id="tcBusinessPrice" minWidth="0.0" prefWidth="84.0" text="BusinessPrice" />
-                  <TableColumn fx:id="tcFirstClassPrice" minWidth="0.0" prefWidth="116.0" text="FirstClassPrice" />
-                  <TableColumn fx:id="tcGateNumber" prefWidth="71.0" text="Gate Number" />
+                  <TableColumn fx:id="tcDepartureTime" prefWidth="65.0" text="DepartureTime" />
+                  <TableColumn fx:id="tcArrivalTime" prefWidth="45.0" text="ArrivalTime" />
+                  <TableColumn fx:id="tcFlightDate" prefWidth="65.0" text="FlightDate" />
+                  <TableColumn fx:id="tcArrivalDate" prefWidth="66.0" text="Arival Date" />
+                  <TableColumn fx:id="tcAircraftType" prefWidth="73.0" text="Aircraft Type" />
+                  <TableColumn fx:id="tcEconomyPrice" minWidth="0.0" prefWidth="77.0" text="EconomyPrice" />
+                  <TableColumn fx:id="tcBusinessPrice" minWidth="0.0" prefWidth="57.0" text="BusinessPrice" />
+                  <TableColumn fx:id="tcFirstClassPrice" minWidth="0.0" prefWidth="68.0" text="FirstClassPrice" />
+                  <TableColumn fx:id="tcGateNumber" prefWidth="94.0" text="Gate Number" />
                </columns>
             </TableView>
             <Button fx:id="btnChangeAdd" contentDisplay="CENTER" layoutX="179.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeAdd" text=" Add Flight" textAlignment="CENTER" />
@@ -285,7 +285,7 @@
             <Button fx:id="btnBackAllBooking" layoutX="28.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnHandleBackAllBooking" text="Back" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apFindFlight" layoutX="7.0" layoutY="526.0" prefHeight="184.0" prefWidth="617.0">
+      <AnchorPane fx:id="apFindFlight" layoutX="14.0" layoutY="565.0" prefHeight="139.0" prefWidth="502.0">
          <children>
             <DatePicker fx:id="dpFlightDate" layoutX="130.0" layoutY="102.0" onAction="#dpHandleFlightDate" />
             <Text layoutX="35.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FlightDate" />

@@ -32,6 +32,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitMenuButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -232,7 +233,7 @@ public class ProjectController implements Initializable {
     private MenuItem flightScheduled;
     @FXML
     private AnchorPane apTvFlight;
-    
+
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -273,7 +274,6 @@ public class ProjectController implements Initializable {
             "CANCELLED"
     );
     private boolean isChecking = false;
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -324,11 +324,24 @@ public class ProjectController implements Initializable {
         tcEconomyPrice.setCellValueFactory(new PropertyValueFactory<>("economyPrice"));
         tcBusinessPrice.setCellValueFactory(new PropertyValueFactory<>("businessPrice"));
         tcFirstClassPrice.setCellValueFactory(new PropertyValueFactory<>("firstClassPrice"));
+        TableColumn<Flight, Void> colAction = new TableColumn<>("Action");
+        colAction.setCellFactory(col -> new TableCell<>() {
+            private final Button btnViewPassengers = new Button("View Passengers");
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : btnViewPassengers);
+            }
+        });
+
+        tvFlight.getColumns().add(colAction);
         tvFlight.setItems(allFlightList);
 
     }
 
     @FXML
+
     private void btnHandleAdd(ActionEvent event) {
         AllFlightDAO dao = new AllFlightDAO();
         Flight add = new Flight();
@@ -686,7 +699,7 @@ public class ProjectController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirmation Dialog");
             alert.setHeaderText("CANCELLED Flight");
-            alert.setContentText("Are you sure you want to CANCELLED the flight FN : "  + flightSelected.getFlightNumber() +"?");
+            alert.setContentText("Are you sure you want to CANCELLED the flight FN : " + flightSelected.getFlightNumber() + "?");
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
@@ -1065,7 +1078,7 @@ public class ProjectController implements Initializable {
 
     @FXML
     private void handleFlightDelayed(ActionEvent event) {
-          List<Flight> cancelledFlights = allFlightList.stream()
+        List<Flight> cancelledFlights = allFlightList.stream()
                 .filter(flight -> "DELAYED".equals(flight.getFlightStatus()))
                 .collect(Collectors.toList());
 
@@ -1077,7 +1090,7 @@ public class ProjectController implements Initializable {
 
     @FXML
     private void handleFlightScheduled(ActionEvent event) {
-           List<Flight> cancelledFlights = allFlightList.stream()
+        List<Flight> cancelledFlights = allFlightList.stream()
                 .filter(flight -> "SCHEDULED".equals(flight.getFlightStatus()))
                 .collect(Collectors.toList());
 

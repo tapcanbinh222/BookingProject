@@ -528,4 +528,54 @@ public class AllFlightDAO {
         }
         return bookingList;
     }
+    public List<BookingFlight> getAllBookingDetailsByFlightId() {
+        List<BookingFlight> bookingList = new ArrayList<>();
+        String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, "
+                + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name "
+                + "FROM bookings b "
+                + "JOIN passengers p ON b.passenger_id = p.passenger_id "
+                + "JOIN seats s ON b.seat_id = s.seat_id "
+                + "JOIN flights f ON b.flight_id = f.flight_id "
+                + "JOIN airlines a ON f.airline_id = a.airline_id WHERE f.flight_id = ?";
+
+        try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql); ResultSet rs = pStm.executeQuery()) {
+
+            while (rs.next()) {
+                BookingFlight allBooking = new BookingFlight();
+                allBooking.setPassengerId(rs.getInt("passenger_id"));
+                allBooking.setFirstName(rs.getString("first_name"));
+                allBooking.setLastName(rs.getString("last_name"));
+                allBooking.setDOB(rs.getDate("date_of_birth").toLocalDate());
+                allBooking.setGender(rs.getString("gender"));
+                allBooking.setPassportId(rs.getString("passport_number"));
+                allBooking.setNationality(rs.getString("nationality"));
+                allBooking.setSeatNumber(rs.getString("seat_number"));
+                allBooking.setBookingId(rs.getInt("booking_id"));
+                allBooking.setFlightStatus(rs.getString("flight_status"));
+                allBooking.setEmail(rs.getString("email"));
+                allBooking.setPhone(rs.getString("phone"));
+                allBooking.setBookingDateTime(rs.getTimestamp("booking_date_time").toLocalDateTime());
+                allBooking.setFlightNumber(rs.getString("flight_number"));
+                allBooking.setGateNumber(rs.getString("gate_number"));
+                allBooking.setAirlineName(rs.getString("airline_name"));
+                pStm.setInt(1, allBooking.getFlightId());
+
+                // Optionally set seat class based on seat number
+                String seatNumber = rs.getString("seat_number");
+                if (seatNumber.endsWith("A")) {
+                    allBooking.setSeatClass("FirstClass");
+                } else if (seatNumber.endsWith("B")) {
+                    allBooking.setSeatClass("Business");
+                } else {
+                    allBooking.setSeatClass("Economy");
+                }
+
+                bookingList.add(allBooking);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        }
+        return bookingList;
+    }
 }
