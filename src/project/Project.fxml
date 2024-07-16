@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -16,7 +17,7 @@
     <children>
       <AnchorPane prefHeight="421.0" prefWidth="1182.0">
          <children>
-            <TableView fx:id="tvFlight" editable="true" prefHeight="417.0" prefWidth="1182.0">
+            <TableView fx:id="tvFlight" editable="true" layoutX="103.0" layoutY="68.0" prefHeight="453.0" prefWidth="1000.0">
                <columns>
                   <TableColumn fx:id="tcFlightNumber" prefWidth="69.0" sortType="DESCENDING" text="FlightNumber" />
                   <TableColumn fx:id="tcAirlineName" prefWidth="97.0" text="Airline_name" />
@@ -34,6 +35,7 @@
                   <TableColumn fx:id="tcGateNumber" prefWidth="71.0" text="Gate Number" />
                </columns>
             </TableView>
+            <SplitMenuButton fx:id="spitMenuStatus" layoutX="22.0" layoutY="14.0" mnemonicParsing="false" text="Status Flight" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="apAdd" layoutX="7.0" layoutY="14.0" prefHeight="610.0" prefWidth="1164.0" visible="false">
@@ -273,7 +275,7 @@
             <Button fx:id="btnBackAllBooking" layoutX="28.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnHandleBackAllBooking" text="Back" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apFindFlight" layoutX="84.0" layoutY="434.0" prefHeight="184.0" prefWidth="617.0">
+      <AnchorPane fx:id="apFindFlight" layoutX="7.0" layoutY="526.0" prefHeight="184.0" prefWidth="617.0">
          <children>
             <DatePicker fx:id="dpFlightDate" layoutX="130.0" layoutY="102.0" onAction="#dpHandleFlightDate" />
             <Text layoutX="35.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="FlightDate" />

@@ -721,7 +721,7 @@ public class ProjectController implements Initializable {
             btnAdd.setVisible(false);
             btnUpdate.setVisible(true);
             txtFlightNumber.setText(flightsSelected.getFlightNumber());
-            txtFlightNumber.setEditable(false); // Không cho phép chỉnh sửa mã chuyến bay
+            txtFlightNumber.setEditable(false);
             comboBoxOrigin.setValue(flightsSelected.getOriginAirportCode());
             comboBoxDestination.setValue(flightsSelected.getDestinationAirportCode());
             txtDepartureTime.setText(flightsSelected.getDepartureTime().toString());
