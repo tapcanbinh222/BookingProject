@@ -224,6 +224,15 @@ public class ProjectController implements Initializable {
     private TextField txtEmail;
     @FXML
     private SplitMenuButton spitMenuStatus;
+    @FXML
+    private MenuItem flightDelayed;
+    @FXML
+    private MenuItem flightCancelled;
+    @FXML
+    private MenuItem flightScheduled;
+    @FXML
+    private AnchorPane apTvFlight;
+    
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -264,12 +273,7 @@ public class ProjectController implements Initializable {
             "CANCELLED"
     );
     private boolean isChecking = false;
-    @FXML
-    private MenuItem flightDelayed;
-    @FXML
-    private MenuItem flightCancelled;
-    @FXML
-    private MenuItem flightScheduled;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -431,7 +435,7 @@ public class ProjectController implements Initializable {
 
             dao.AddDB(add);
             allFlightList.add(add);
-            tvFlight.setVisible(true);
+            apTvFlight.setVisible(true);
             apButonCRUD.setVisible(true);
             apAdd.setVisible(false);
 
@@ -585,10 +589,9 @@ public class ProjectController implements Initializable {
 
             clearInputFields();
             apFindFlight.setVisible(true);
-            tvFlight.setVisible(true);
+            apTvFlight.setVisible(true);
             apButonCRUD.setVisible(true);
             apAdd.setVisible(false);
-            tvFlight.refresh();
             showAlert("Success", "Flight updated successfully.");
         } catch (NumberFormatException e) {
             showAlert("Error", "Please enter a valid number for price.");
@@ -708,7 +711,7 @@ public class ProjectController implements Initializable {
 
     @FXML
     private void btnHandleBack(ActionEvent event) {
-        tvFlight.setVisible(true);
+        apTvFlight.setVisible(true);
         apButonCRUD.setVisible(true);
         apAdd.setVisible(false);
         apBooking.setVisible(false);
@@ -722,13 +725,13 @@ public class ProjectController implements Initializable {
         Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
         if (flightsSelected == null) {
             showAlert("Error", "No flight selected.");
-            tvFlight.setVisible(true);
+            apTvFlight.setVisible(true);
             apButonCRUD.setVisible(true);
             apAdd.setVisible(false);
             apFindFlight.setVisible(true);
         } else {
             apFindFlight.setVisible(false);
-            tvFlight.setVisible(false);
+            apTvFlight.setVisible(false);
             apButonCRUD.setVisible(false);
             apAdd.setVisible(true);
             btnAdd.setVisible(false);
@@ -753,7 +756,7 @@ public class ProjectController implements Initializable {
 
     @FXML
     private void btnHandleChangeAdd(ActionEvent event) {
-        tvFlight.setVisible(false);
+        apTvFlight.setVisible(false);
         apFindFlight.setVisible(false);
         apButonCRUD.setVisible(false);
         apAdd.setVisible(true);
@@ -772,14 +775,14 @@ public class ProjectController implements Initializable {
 
             if (flightsSelected == null) {
                 showAlert("Error", "Selected Flight to Booking.");
-                tvFlight.setVisible(true);
+                apTvFlight.setVisible(true);
                 apButonCRUD.setVisible(true);
                 apAdd.setVisible(false);
                 apFindFlight.setVisible(true);
 
             } else {
                 apFindFlight.setVisible(false);
-                tvFlight.setVisible(false);
+                apTvFlight.setVisible(false);
                 apButonCRUD.setVisible(false);
                 apBooking.setVisible(true);
                 txtGetFlightNumber.setText(flightsSelected.getFlightNumber());
@@ -952,7 +955,7 @@ public class ProjectController implements Initializable {
     @FXML
     private void btnHandlechangeAllBooking(ActionEvent event) {
         apPassengerFlight.setVisible(true);
-        tvFlight.setVisible(false);
+        apTvFlight.setVisible(false);
         apButonCRUD.setVisible(false);
         apButtonAllBooking.setVisible(true);
         apFindFlight.setVisible(false);
@@ -991,7 +994,7 @@ public class ProjectController implements Initializable {
     @FXML
     private void btnHandleBackAllBooking(ActionEvent event) {
         apPassengerFlight.setVisible(false);
-        tvFlight.setVisible(true);
+        apTvFlight.setVisible(true);
         apButonCRUD.setVisible(true);
         apButtonAllBooking.setVisible(false);
         apFindFlight.setVisible(true);

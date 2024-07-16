@@ -16,8 +16,14 @@
 
 <AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.ProjectController">
     <children>
-      <AnchorPane prefHeight="421.0" prefWidth="1182.0">
+      <AnchorPane fx:id="apTvFlight" prefHeight="421.0" prefWidth="1182.0">
          <children>
+            <SplitMenuButton fx:id="spitMenuStatus" layoutX="22.0" layoutY="14.0" mnemonicParsing="false" text="Status Flight">
+               <items>
+                  <MenuItem fx:id="flightDelayed" mnemonicParsing="false" onAction="#handleFlightDelayed" text="Delayed" />
+                  <MenuItem fx:id="flightCancelled" mnemonicParsing="false" onAction="#handleFlightCancelled" text="Cancelled" />
+                  <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Delayed" />
+               </items></SplitMenuButton>
             <TableView fx:id="tvFlight" editable="true" layoutX="103.0" layoutY="68.0" prefHeight="453.0" prefWidth="1000.0">
                <columns>
                   <TableColumn fx:id="tcFlightNumber" prefWidth="69.0" sortType="DESCENDING" text="FlightNumber" />
@@ -36,13 +42,7 @@
                   <TableColumn fx:id="tcGateNumber" prefWidth="71.0" text="Gate Number" />
                </columns>
             </TableView>
-            <SplitMenuButton fx:id="spitMenuStatus" layoutX="22.0" layoutY="14.0" mnemonicParsing="false" text="Status Flight">
-               <items>
-                  <MenuItem fx:id="flightDelayed" mnemonicParsing="false" onAction="#handleFlightDelayed" text="Delayed" />
-                  <MenuItem fx:id="flightCancelled" mnemonicParsing="false" onAction="#handleFlightCancelled" text="Cancelled" />
-                  <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Delayed" />
-               </items></SplitMenuButton>
-            <Button fx:id="btnChangeAdd" contentDisplay="CENTER" layoutX="179.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeAdd" text="Add" textAlignment="CENTER" />
+            <Button fx:id="btnChangeAdd" contentDisplay="CENTER" layoutX="179.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleChangeAdd" text=" Add Flight" textAlignment="CENTER" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="apAdd" layoutX="7.0" layoutY="14.0" prefHeight="610.0" prefWidth="1164.0" visible="false">
@@ -84,10 +84,10 @@
             <ComboBox fx:id="comboBoxFlightStatus" layoutX="180.0" layoutY="297.0" prefWidth="150.0" promptText="Status" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apButonCRUD" layoutX="719.0" layoutY="526.0" prefHeight="111.0" prefWidth="445.0">
+      <AnchorPane fx:id="apButonCRUD" layoutX="643.0" layoutY="534.0" prefHeight="111.0" prefWidth="445.0">
          <children>
-            <Button fx:id="btnchangeAllBooking" contentDisplay="CENTER" layoutX="236.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandlechangeAllBooking" text="All Booking" textAlignment="CENTER" />
-            <SplitMenuButton layoutX="21.0" layoutY="14.0" mnemonicParsing="false" text="SplitMenuButton">
+            <Button fx:id="btnchangeAllBooking" contentDisplay="CENTER" layoutX="139.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandlechangeAllBooking" text="All Booking" textAlignment="CENTER" />
+            <SplitMenuButton layoutX="21.0" layoutY="14.0" mnemonicParsing="false" text="Action">
               <items>
                 <MenuItem fx:id="btnDelete" mnemonicParsing="false" onAction="#btnHandleDelete" text="Cancelled" />
                 <MenuItem fx:id="btnchangeUpdate" mnemonicParsing="false" onAction="#btnHandleChangeUpdate" text="Update" />
