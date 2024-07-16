@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -35,7 +36,12 @@
                   <TableColumn fx:id="tcGateNumber" prefWidth="71.0" text="Gate Number" />
                </columns>
             </TableView>
-            <SplitMenuButton fx:id="spitMenuStatus" layoutX="22.0" layoutY="14.0" mnemonicParsing="false" text="Status Flight" />
+            <SplitMenuButton fx:id="spitMenuStatus" layoutX="22.0" layoutY="14.0" mnemonicParsing="false" text="Status Flight">
+               <items>
+                  <MenuItem fx:id="flightDelayed" mnemonicParsing="false" onAction="#handleFlightDelayed" text="Delayed" />
+                  <MenuItem fx:id="flightCancelled" mnemonicParsing="false" onAction="#handleFlightCancelled" text="Cancelled" />
+                  <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Delayed" />
+               </items></SplitMenuButton>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="apAdd" layoutX="7.0" layoutY="14.0" prefHeight="610.0" prefWidth="1164.0" visible="false">

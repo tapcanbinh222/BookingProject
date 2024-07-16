@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -29,6 +30,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -219,7 +222,8 @@ public class ProjectController implements Initializable {
     private TextField txtPhone;
     @FXML
     private TextField txtEmail;
-
+    @FXML
+    private SplitMenuButton spitMenuStatus;
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -255,11 +259,17 @@ public class ProjectController implements Initializable {
             "China"
     );
     ObservableList<String> optionsFlightStatus = FXCollections.observableArrayList(
-            "Scheduled",
-            "Delayed",
-            "Cancelled"
+            "SCHEDULED",
+            "DELAYED",
+            "CANCELLED"
     );
     private boolean isChecking = false;
+    @FXML
+    private MenuItem flightDelayed;
+    @FXML
+    private MenuItem flightCancelled;
+    @FXML
+    private MenuItem flightScheduled;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -271,6 +281,8 @@ public class ProjectController implements Initializable {
         });
         comboBoxOrigin.valueProperty().addListener((obs, oldVal, newVal) -> checkOriginAndDestination());
         comboBoxDestination.valueProperty().addListener((obs, oldVal, newVal) -> checkOriginAndDestination());
+        flightDelayed.setOnAction(this::handleFlightDelayed);
+        flightCancelled.setOnAction(this::handleFlightCancelled);
         comboBoxAircraftName.setItems(options);
         comboBoxAirlineName.setItems(optionsAirlineName);
         comboBoxOrigin.setItems(optionsOrigin);
@@ -1033,6 +1045,42 @@ public class ProjectController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleFlightCancelled(ActionEvent event) {
+        List<Flight> cancelledFlights = allFlightList.stream()
+                .filter(flight -> "CANCELLED".equals(flight.getFlightStatus()))
+                .collect(Collectors.toList());
+
+        ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
+        tvFlight.setItems(cancelledFlightList);
+
+        showAlert("Flight Cancelled", "Displaying CANCELLED flights.");
+    }
+
+    @FXML
+    private void handleFlightDelayed(ActionEvent event) {
+          List<Flight> cancelledFlights = allFlightList.stream()
+                .filter(flight -> "DELAYED".equals(flight.getFlightStatus()))
+                .collect(Collectors.toList());
+
+        ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
+        tvFlight.setItems(cancelledFlightList);
+
+        showAlert("Flight Cancelled", "Displaying DELAYED flights.");
+    }
+
+    @FXML
+    private void handleFlightScheduled(ActionEvent event) {
+           List<Flight> cancelledFlights = allFlightList.stream()
+                .filter(flight -> "SCHEDULED".equals(flight.getFlightStatus()))
+                .collect(Collectors.toList());
+
+        ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
+        tvFlight.setItems(cancelledFlightList);
+
+        showAlert("Flight Cancelled", "Displaying SCHEDULED flights.");
     }
 
 }
