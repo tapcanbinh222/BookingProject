@@ -234,7 +234,40 @@ public class ProjectController implements Initializable {
     private MenuItem flightScheduled;
     @FXML
     private AnchorPane apTvFlight;
-
+    @FXML
+    private AnchorPane apPassByFlight;
+    @FXML
+    private TableView<BookingFlight> tvPassengerById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcFirstNameById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcLastNameById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcFlightStatusById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcDOBById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcGenderById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcPassportIDById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcNationalityById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcSeatNumberById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcSeatClassById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcGateNumberById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcEmailById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcPhoneById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcBookingDateById;
+    @FXML
+    private TableColumn<?, ?> tcAirlineNameById;
+    @FXML
+    private TableColumn<?, ?> tcFlightNumberById;
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -276,39 +309,7 @@ public class ProjectController implements Initializable {
     );
     private boolean isChecking = false;
     @FXML
-    private AnchorPane apPassByFlight;
-    @FXML
-    private TableView<BookingFlight> tvPassengerById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcFirstNameById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcLastNameById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcFlightStatusById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcDOBById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcGenderById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcPassportIDById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcNationalityById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcSeatNumberById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcSeatClassById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcGateNumberById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcEmailById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcPhoneById;
-    @FXML
-    private TableColumn<BookingFlight, String> tcBookingDateById;
-    @FXML
-    private TableColumn<?, ?> tcAirlineNameById;
-    @FXML
-    private TableColumn<?, ?> tcFlightNumberById;
+    private Button btnBackViewPassById;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -374,6 +375,11 @@ public class ProjectController implements Initializable {
                     btnViewPassengers.setOnAction(event -> {
                         Flight flight = getTableView().getItems().get(getIndex());
                         loadPassengers(flight.getFlightId());
+                        apFindFlight.setVisible(false);
+                        apTvFlight.setVisible(false);
+                        apButonCRUD.setVisible(false);
+                        apAdd.setVisible(false);
+                        btnAdd.setVisible(false);
                     });
                 }
             }
@@ -386,13 +392,12 @@ public class ProjectController implements Initializable {
     private ObservableList<BookingFlight> passengerList = FXCollections.observableArrayList();
 
     private void loadPassengers(int flightId) {
-         AllFlightDAO service = new AllFlightDAO();
-    List<BookingFlight> bookings = service.getAllBookingDetailsByFlightId(flightId);
-    passengerList.clear();
-    passengerList.addAll(bookings);
-    displayPassengers(flightId);  // Gọi displayPassengers sau khi tải thông tin
-}
-
+        AllFlightDAO service = new AllFlightDAO();
+        List<BookingFlight> bookings = service.getAllBookingDetailsByFlightId(flightId);
+        passengerList.clear();
+        passengerList.addAll(bookings);
+        displayPassengers(flightId);  // Gọi displayPassengers sau khi tải thông tin
+    }
 
     private void displayPassengers(int flightId) {
         AllFlightDAO service = new AllFlightDAO();
@@ -420,7 +425,7 @@ public class ProjectController implements Initializable {
 
         // Chuyển đổi sang chế độ xem hành khách
         apPassByFlight.setVisible(true);
-        tvFlight.setVisible(false);
+        apTvFlight.setVisible(false);
     }
 
     @FXML
@@ -1180,6 +1185,14 @@ public class ProjectController implements Initializable {
         tvFlight.setItems(cancelledFlightList);
 
         showAlert("Flight SCHEDULED", "Displaying SCHEDULED flights.");
+    }
+
+    @FXML
+    private void btnHandleBackViewPassById(ActionEvent event) {
+        apPassByFlight.setVisible(false);
+        apTvFlight.setVisible(true);
+        apButonCRUD.setVisible(true);
+        apFindFlight.setVisible(true);
     }
 
 }

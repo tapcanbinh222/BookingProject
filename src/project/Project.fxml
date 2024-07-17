@@ -317,7 +317,7 @@
                   <TableColumn fx:id="tcFlightNumberById" prefWidth="66.0" text="FlightNumber" />
                </columns>
             </TableView>
-            <Button layoutX="83.0" layoutY="502.0" mnemonicParsing="false" text="Back" />
+            <Button fx:id="btnBackViewPassById" layoutX="83.0" layoutY="502.0" mnemonicParsing="false" onAction="#btnHandleBackViewPassById" text="Back" />
          </children>
       </AnchorPane>
     </children>
