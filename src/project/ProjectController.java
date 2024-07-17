@@ -7,6 +7,7 @@ package project;
 import Database.AllFlightDAO;
 import Modal.Seats;
 import Service.BookingFlight;
+import Service.BookingFlight;
 import Service.Flight;
 import java.net.URL;
 import java.sql.SQLException;
@@ -274,6 +275,40 @@ public class ProjectController implements Initializable {
             "CANCELLED"
     );
     private boolean isChecking = false;
+    @FXML
+    private AnchorPane apPassByFlight;
+    @FXML
+    private TableView<BookingFlight> tvPassengerById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcFirstNameById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcLastNameById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcFlightStatusById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcDOBById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcGenderById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcPassportIDById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcNationalityById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcSeatNumberById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcSeatClassById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcGateNumberById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcEmailById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcPhoneById;
+    @FXML
+    private TableColumn<BookingFlight, String> tcBookingDateById;
+    @FXML
+    private TableColumn<?, ?> tcAirlineNameById;
+    @FXML
+    private TableColumn<?, ?> tcFlightNumberById;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -305,6 +340,7 @@ public class ProjectController implements Initializable {
         System.out.println("Data Loaded: " + allFlightList.size());
 
     }
+
     AllFlightDAO allFlightDAO = new AllFlightDAO();
     ObservableList<Flight> allFlightList = FXCollections.observableArrayList(allFlightDAO.listAllFlight());
 
@@ -331,7 +367,15 @@ public class ProjectController implements Initializable {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : btnViewPassengers);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(btnViewPassengers);
+                    btnViewPassengers.setOnAction(event -> {
+                        Flight flight = getTableView().getItems().get(getIndex());
+                        loadPassengers(flight.getFlightId());
+                    });
+                }
             }
         });
 
@@ -339,9 +383,47 @@ public class ProjectController implements Initializable {
         tvFlight.setItems(allFlightList);
 
     }
+    private ObservableList<BookingFlight> passengerList = FXCollections.observableArrayList();
+
+    private void loadPassengers(int flightId) {
+         AllFlightDAO service = new AllFlightDAO();
+    List<BookingFlight> bookings = service.getAllBookingDetailsByFlightId(flightId);
+    passengerList.clear();
+    passengerList.addAll(bookings);
+    displayPassengers(flightId);  // Gọi displayPassengers sau khi tải thông tin
+}
+
+
+    private void displayPassengers(int flightId) {
+        AllFlightDAO service = new AllFlightDAO();
+        List<BookingFlight> bookings = service.getAllBookingDetailsByFlightId(flightId);
+
+        ObservableList<BookingFlight> bookingList = FXCollections.observableArrayList(bookings);
+        tvPassengerById.setItems(bookingList);
+
+        // Thiết lập các cột của bảng tvPassengerById
+        tcFirstNameById.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        tcLastNameById.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        tcFlightStatusById.setCellValueFactory(new PropertyValueFactory<>("flightStatus"));
+        tcDOBById.setCellValueFactory(new PropertyValueFactory<>("DOB"));
+        tcGenderById.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        tcPassportIDById.setCellValueFactory(new PropertyValueFactory<>("passportId"));
+        tcNationalityById.setCellValueFactory(new PropertyValueFactory<>("nationality"));
+        tcSeatNumberById.setCellValueFactory(new PropertyValueFactory<>("seatNumber"));
+        tcSeatClassById.setCellValueFactory(new PropertyValueFactory<>("seatClass"));
+        tcGateNumberById.setCellValueFactory(new PropertyValueFactory<>("gateNumber"));
+        tcEmailById.setCellValueFactory(new PropertyValueFactory<>("email"));
+        tcPhoneById.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        tcBookingDateById.setCellValueFactory(new PropertyValueFactory<>("bookingDateTime"));
+        tcAirlineNameById.setCellValueFactory(new PropertyValueFactory<>("airlineName"));
+        tcFlightNumberById.setCellValueFactory(new PropertyValueFactory<>("flightNumber"));
+
+        // Chuyển đổi sang chế độ xem hành khách
+        apPassByFlight.setVisible(true);
+        tvFlight.setVisible(false);
+    }
 
     @FXML
-
     private void btnHandleAdd(ActionEvent event) {
         AllFlightDAO dao = new AllFlightDAO();
         Flight add = new Flight();

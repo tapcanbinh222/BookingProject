@@ -528,18 +528,20 @@ public class AllFlightDAO {
         }
         return bookingList;
     }
-    public List<BookingFlight> getAllBookingDetailsByFlightId() {
+
+    public List<BookingFlight> getAllBookingDetailsByFlightId(int flightId) {
         List<BookingFlight> bookingList = new ArrayList<>();
         String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, "
-                + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name "
+                + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number, f.flight_status, a.airline_name "
                 + "FROM bookings b "
                 + "JOIN passengers p ON b.passenger_id = p.passenger_id "
                 + "JOIN seats s ON b.seat_id = s.seat_id "
                 + "JOIN flights f ON b.flight_id = f.flight_id "
                 + "JOIN airlines a ON f.airline_id = a.airline_id WHERE f.flight_id = ?";
 
-        try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql); ResultSet rs = pStm.executeQuery()) {
-
+        try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql)) {
+            pStm.setInt(1, flightId);
+            ResultSet rs = pStm.executeQuery();
             while (rs.next()) {
                 BookingFlight allBooking = new BookingFlight();
                 allBooking.setPassengerId(rs.getInt("passenger_id"));
@@ -558,9 +560,8 @@ public class AllFlightDAO {
                 allBooking.setFlightNumber(rs.getString("flight_number"));
                 allBooking.setGateNumber(rs.getString("gate_number"));
                 allBooking.setAirlineName(rs.getString("airline_name"));
-                pStm.setInt(1, allBooking.getFlightId());
 
-                // Optionally set seat class based on seat number
+                // Tùy chọn thiết lập loại ghế dựa trên số ghế
                 String seatNumber = rs.getString("seat_number");
                 if (seatNumber.endsWith("A")) {
                     allBooking.setSeatClass("FirstClass");
@@ -574,7 +575,6 @@ public class AllFlightDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-
         }
         return bookingList;
     }

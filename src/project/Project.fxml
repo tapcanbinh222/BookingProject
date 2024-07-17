@@ -296,5 +296,29 @@
             <Button layoutX="385.0" layoutY="101.0" mnemonicParsing="false" onAction="#btnFind" text="Find" />
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="apPassByFlight" layoutY="-1.0" prefHeight="721.0" prefWidth="1187.0" visible="false">
+         <children>
+            <TableView fx:id="tvPassengerById" layoutX="26.0" layoutY="58.0" prefHeight="389.0" prefWidth="1094.0">
+               <columns>
+                  <TableColumn fx:id="tcFirstNameById" prefWidth="46.0" text="First Name" />
+                  <TableColumn fx:id="tcLastNameById" prefWidth="49.0" text="Last Name" />
+                  <TableColumn fx:id="tcFlightStatusById" prefWidth="62.0" text="FlightStatus" />
+                  <TableColumn fx:id="tcDOBById" minWidth="0.0" prefWidth="75.0" text="Date Of Birth" />
+                  <TableColumn fx:id="tcGenderById" prefWidth="68.0" text="Gender" />
+                  <TableColumn fx:id="tcPassportIDById" prefWidth="113.0" text="Passport ID/National ID" />
+                  <TableColumn fx:id="tcNationalityById" prefWidth="70.0" text="Nationality" />
+                  <TableColumn fx:id="tcSeatNumberById" minWidth="7.0" prefWidth="84.0" text="Seat Number" />
+                  <TableColumn fx:id="tcSeatClassById" prefWidth="63.0" text="Seat Class" />
+                  <TableColumn fx:id="tcGateNumberById" prefWidth="91.0" text="Gate Number" />
+                  <TableColumn fx:id="tcEmailById" prefWidth="94.0" text="Email" />
+                  <TableColumn fx:id="tcPhoneById" prefWidth="96.0" text="Phone" />
+                  <TableColumn fx:id="tcBookingDateById" prefWidth="110.0" text="Booking Date Time" />
+                  <TableColumn fx:id="tcAirlineNameById" prefWidth="75.0" text="Airlinename" />
+                  <TableColumn fx:id="tcFlightNumberById" prefWidth="66.0" text="FlightNumber" />
+               </columns>
+            </TableView>
+            <Button layoutX="83.0" layoutY="502.0" mnemonicParsing="false" text="Back" />
+         </children>
+      </AnchorPane>
     </children>
 </AnchorPane>
