@@ -571,8 +571,7 @@ public class ProjectController implements Initializable {
             alert.showAndWait();
         } catch (DateTimeParseException e) {
             showAlert("Error", "Invalid time or date format.");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
             showAlert("Error", "Unknown error: " + e.getMessage());
         }
     }
@@ -781,7 +780,7 @@ public class ProjectController implements Initializable {
                 return null;
         }
     }
-
+    
     private void clearInputFields() {
         txtFlightNumber.clear();
         txtFlightNumber.setEditable(true); // Cho phép chỉnh sửa mã chuyến bay khi thêm mới
@@ -935,7 +934,6 @@ public class ProjectController implements Initializable {
                 // Hiển thị danh sách ghế
             }
         } catch (Exception e) {
-            e.printStackTrace();
             showAlert("Error", "Unexpected error: " + e.getMessage());
         }
     }
@@ -1055,7 +1053,6 @@ public class ProjectController implements Initializable {
                 alert.setContentText("Your booking has been successfully made.");
                 alert.showAndWait();
             } catch (SQLException e) {
-                e.printStackTrace();
                 // Show error message dialog
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -1074,7 +1071,6 @@ public class ProjectController implements Initializable {
             AllFlightDAO dao = new AllFlightDAO();
             seatId = dao.getSeatIdByNumberAndFlight(flightId, seatNumber);
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return seatId;
     }
@@ -1164,7 +1160,6 @@ public class ProjectController implements Initializable {
             // Thiết lập dữ liệu cho TableView
             tvPassengerFlight.setItems(allBookingList);
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
