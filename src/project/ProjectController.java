@@ -38,6 +38,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 
 public class ProjectController implements Initializable {
 
@@ -258,9 +259,9 @@ public class ProjectController implements Initializable {
     @FXML
     private TableColumn<BookingFlight, String> tcBookingDateById;
     @FXML
-    private TableColumn<?, ?> tcAirlineNameById;
+    private TableColumn<BookingFlight, String> tcAirlineNameById;
     @FXML
-    private TableColumn<?, ?> tcFlightNumberById;
+    private TableColumn<BookingFlight, String> tcFlightNumberById;
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -351,6 +352,13 @@ public class ProjectController implements Initializable {
         TableColumn<Flight, Void> colAction = new TableColumn<>("Action");
         colAction.setCellFactory(col -> new TableCell<>() {
             private final Button btnViewPassengers = new Button("View Passengers");
+            private final Button btnDetail = new Button("Detail");
+
+            private final HBox pane = new HBox(btnViewPassengers, btnDetail);
+
+            {
+                pane.setSpacing(10); // Set spacing between buttons
+            }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
@@ -358,7 +366,8 @@ public class ProjectController implements Initializable {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(btnViewPassengers);
+                    setGraphic(pane);
+
                     btnViewPassengers.setOnAction(event -> {
                         Flight flight = getTableView().getItems().get(getIndex());
                         loadPassengers(flight.getFlightId());
@@ -367,6 +376,11 @@ public class ProjectController implements Initializable {
                         apButonCRUD.setVisible(false);
                         apAdd.setVisible(false);
                         btnAdd.setVisible(false);
+                    });
+
+                    btnDetail.setOnAction(event -> {
+                        Flight flight = getTableView().getItems().get(getIndex());
+                        showFlightDetails(flight);
                     });
                 }
             }
@@ -413,6 +427,27 @@ public class ProjectController implements Initializable {
         // Chuyển đổi sang chế độ xem hành khách
         apPassByFlight.setVisible(true);
         apTvFlight.setVisible(false);
+    }
+
+    private void showFlightDetails(Flight flight) {
+        // Hiển thị chi tiết của chuyến bay trong giao diện người dùng
+        // Ví dụ: hiển thị một cửa sổ mới với thông tin chi tiết của chuyến bay
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Flight Details");
+        alert.setHeaderText("Details of Flight: " + flight.getFlightNumber());
+        alert.setContentText("Origin: " + flight.getOriginAirportCode()
+                + "\nDestination: " + flight.getDestinationAirportCode()
+                + "\nDeparture Time: " + flight.getDepartureTime()
+                + "\nArrival Time: " + flight.getArrivalTime()
+                + "\nAirline: " + flight.getAirlineName()
+                + "\nStatus: " + flight.getFlightStatus()
+                + "\nDate: " + flight.getFlightDate()
+                + "\nRemaining Economy seats: " + flight.getEconomySeats()
+                + "\nRemaining Business seats: " + flight.getBusinessSeats()
+                + "\nRemaining First Class seats: " + flight.getFirstClassSeats()
+        );
+
+        alert.showAndWait();
     }
 
     @FXML
@@ -780,12 +815,12 @@ public class ProjectController implements Initializable {
                 return null;
         }
     }
-    
+
     private void clearInputFields() {
         txtFlightNumber.clear();
         txtFlightNumber.setEditable(true); // Cho phép chỉnh sửa mã chuyến bay khi thêm mới
         txtDepartureTime.clear();
-        txtArrivalTime.clear();     
+        txtArrivalTime.clear();
         txtGateNumber.clear();
         txtEconomyPrice.clear();
         txtBusinessPrice.clear();

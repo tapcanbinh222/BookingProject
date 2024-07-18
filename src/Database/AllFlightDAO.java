@@ -49,6 +49,9 @@ public class AllFlightDAO {
                 + "    flights.gate_number,\n"
                 + "    airlines.airline_name, \n"
                 + "    aircraft_types.aircraft_type_name,\n"
+                + "    aircraft_types.economy_seats,\n"
+                + "    aircraft_types.business_seats,\n"
+                + "    aircraft_types.firt_class_seats,\n"
                 + "    flight_prices.economy_price, \n"
                 + "	flight_prices.business_price, \n"
                 + "	flight_prices.first_class_price\n"
@@ -83,7 +86,10 @@ public class AllFlightDAO {
                 flight.setEconomyPrice(rs.getDouble("economy_price"));
                 flight.setBusinessPrice(rs.getDouble("business_price"));
                 flight.setFirstClassPrice(rs.getDouble("first_class_price"));
-                airlines.setAirlineName(rs.getString("airline_name"));
+                flight.setAirlineName(rs.getString("airline_name"));
+                flight.setEconomySeats(rs.getInt("economy_seats"));
+                flight.setBusinessSeats(rs.getInt("business_seats"));
+                flight.setFirstClassSeats(rs.getInt("firt_class_seats"));
 
                 list.add(flight);
             }
