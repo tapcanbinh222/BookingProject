@@ -729,7 +729,7 @@ public class ProjectController implements Initializable {
         return textField.getText() == null || textField.getText().isEmpty();
     }
 
-    private boolean isEmpty(ComboBox<?> comboBox) {
+    private boolean isEmpty(ComboBox<String> comboBox) {
         return comboBox.getValue() == null;
     }
 
@@ -785,16 +785,21 @@ public class ProjectController implements Initializable {
         txtFlightNumber.clear();
         txtFlightNumber.setEditable(true); // Cho phép chỉnh sửa mã chuyến bay khi thêm mới
         txtDepartureTime.clear();
-        txtArrivalTime.clear();
-        comboBoxFlightStatus.setValue("Status");
+        txtArrivalTime.clear();     
         txtGateNumber.clear();
         txtEconomyPrice.clear();
         txtBusinessPrice.clear();
         txtFirstClassPrice.clear();
         dpArrivalDate.setValue(null);
         dpDepartureDate.setValue(null);
-        comboBoxAirlineName.setValue("Airline Name");
-        comboBoxAircraftName.setValue("AircraftName");
+        comboBoxFlightStatus.setValue(null);
+        comboBoxAirlineName.setValue(null);
+        comboBoxAircraftName.setValue(null);
+        comboBoxOrigin.setValue(null);
+        comboBoxDestination.setValue(null);
+        comboBoxFlightStatus.setPromptText("Status");
+        comboBoxAirlineName.setPromptText("Airline Name");
+        comboBoxAircraftName.setPromptText("AircraftName");
         comboBoxOrigin.setPromptText("Origin");
         comboBoxDestination.setPromptText("Destination");
 
@@ -885,8 +890,8 @@ public class ProjectController implements Initializable {
         apAdd.setVisible(true);
         btnAdd.setVisible(true);
         btnUpdate.setVisible(false);
-        comboBoxOrigin.setValue("Origin");
-        comboBoxDestination.setValue("Destination");
+        comboBoxOrigin.setPromptText("Origin");
+        comboBoxDestination.setPromptText("Destination");
     }
 
     // In ra danh sách ObservableList
@@ -1120,7 +1125,6 @@ public class ProjectController implements Initializable {
                 comboBoxSeat.getItems().clear();
                 comboBoxSeat.getItems().addAll(filteredSeats);
             } catch (SQLException e) {
-                e.printStackTrace();
             }
         }
     }
