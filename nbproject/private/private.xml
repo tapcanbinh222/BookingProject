@@ -6,6 +6,7 @@
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Modal/FlightPrices.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Service/Flight.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/project/ProjectController.java</file>
+            <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/project/Project.fxml</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Modal/Booking.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Modal/Airports.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Modal/AircraftTypes.java</file>
@@ -16,7 +17,6 @@
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Database/AllFlightDAO.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Modal/Flights.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Service/BookingFlight.java</file>
-            <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Service/BookingFlightById.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Database/ConnectDB.java</file>
             <file>file:/D:/NetBeansProjects/java2/ProjectTestV4/src/Modal/Passenger.java</file>
         </group>
