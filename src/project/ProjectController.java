@@ -63,6 +63,8 @@ public class ProjectController implements Initializable {
     @FXML
     private TableColumn<Flight, Double> tcFirstClassPrice;
     @FXML
+    private TableColumn<Flight, LocalDate> tcFlightDate;
+    @FXML
     private TableView<Flight> tvFlight;
     @FXML
     private Button btnAdd;
@@ -302,6 +304,10 @@ public class ProjectController implements Initializable {
             "CANCELLED"
     );
     private boolean isChecking = false;
+    @FXML
+    private Button btnRefund;
+    @FXML
+    private Button btnDetailPass;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -349,6 +355,7 @@ public class ProjectController implements Initializable {
         tcEconomyPrice.setCellValueFactory(new PropertyValueFactory<>("economyPrice"));
         tcBusinessPrice.setCellValueFactory(new PropertyValueFactory<>("businessPrice"));
         tcFirstClassPrice.setCellValueFactory(new PropertyValueFactory<>("firstClassPrice"));
+        tcFlightDate.setCellValueFactory(new PropertyValueFactory<>("flightDate"));
         TableColumn<Flight, Void> colAction = new TableColumn<>("Action");
         colAction.setCellFactory(col -> new TableCell<>() {
             private final Button btnViewPassengers = new Button("View Passengers");

@@ -16,7 +16,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="980.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.ProjectController">
     <children>
-      <AnchorPane fx:id="apTvFlight" prefHeight="421.0" prefWidth="1182.0">
+      <AnchorPane fx:id="apTvFlight" prefHeight="538.0" prefWidth="1182.0">
          <children>
             <SplitMenuButton fx:id="spitMenuStatus" layoutX="22.0" layoutY="14.0" mnemonicParsing="false" text="Status Flight">
                <items>
@@ -24,14 +24,15 @@
                   <MenuItem fx:id="flightCancelled" mnemonicParsing="false" onAction="#handleFlightCancelled" text="Cancelled" />
                   <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Delayed" />
                </items></SplitMenuButton>
-            <TableView fx:id="tvFlight" editable="true" layoutX="96.0" layoutY="85.0" prefHeight="453.0" prefWidth="965.0">
+            <TableView fx:id="tvFlight" editable="true" layoutX="96.0" layoutY="85.0" prefHeight="453.0" prefWidth="994.0">
                <columns>
                   <TableColumn fx:id="tcFlightNumber" prefWidth="69.0" sortType="DESCENDING" text="Flight no" />
                   <TableColumn fx:id="tcAirlineName" prefWidth="79.0" text="Airline" />
-                  <TableColumn fx:id="tcOrigin" prefWidth="86.0" text="Origin" />
-                  <TableColumn fx:id="tcDestination" prefWidth="85.0" text="Destination" />
-                  <TableColumn fx:id="tcDepartureTime" prefWidth="78.0" text="Departure" />
-                  <TableColumn fx:id="tcArrivalTime" prefWidth="101.0" text="Arrival" />
+                  <TableColumn fx:id="tcFlightDate" prefWidth="83.0" text="Date" />
+                  <TableColumn fx:id="tcOrigin" prefWidth="83.0" text="Origin" />
+                  <TableColumn fx:id="tcDestination" prefWidth="92.0" text="Destination" />
+                  <TableColumn fx:id="tcDepartureTime" prefWidth="93.0" text="Departure" />
+                  <TableColumn fx:id="tcArrivalTime" prefWidth="74.0" text="Arrival" />
                   <TableColumn fx:id="tcEconomyPrice" minWidth="0.0" prefWidth="91.0" text="Eco" />
                   <TableColumn fx:id="tcBusinessPrice" minWidth="0.0" prefWidth="84.0" text="Business" />
                   <TableColumn fx:id="tcFirstClassPrice" minWidth="0.0" prefWidth="81.0" text="First Class" />
@@ -294,7 +295,7 @@
       </AnchorPane>
       <AnchorPane fx:id="apPassByFlight" layoutY="-1.0" prefHeight="721.0" prefWidth="1187.0" visible="false">
          <children>
-            <TableView fx:id="tvPassengerById" layoutX="26.0" layoutY="58.0" prefHeight="389.0" prefWidth="1094.0">
+            <TableView fx:id="tvPassengerById" layoutX="47.0" layoutY="153.0" prefHeight="389.0" prefWidth="1094.0">
                <columns>
                   <TableColumn fx:id="tcFirstNameById" prefWidth="46.0" text="First Name" />
                   <TableColumn fx:id="tcLastNameById" prefWidth="49.0" text="Last Name" />
@@ -313,7 +314,9 @@
                   <TableColumn fx:id="tcFlightNumberById" prefWidth="66.0" text="FlightNumber" />
                </columns>
             </TableView>
-            <Button fx:id="btnBackViewPassById" layoutX="83.0" layoutY="502.0" mnemonicParsing="false" onAction="#btnHandleBackViewPassById" text="Back" />
+            <Button fx:id="btnBackViewPassById" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnHandleBackViewPassById" text="Back" />
+            <Button fx:id="btnRefund" layoutX="1080.0" layoutY="564.0" mnemonicParsing="false" onAction="#btnHandleBackViewPassById" text="Refund" />
+            <Button fx:id="btnDetailPass" layoutX="989.0" layoutY="564.0" mnemonicParsing="false" onAction="#btnHandleBackViewPassById" text="Detail" />
          </children>
       </AnchorPane>
     </children>

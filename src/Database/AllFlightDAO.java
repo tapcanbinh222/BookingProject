@@ -324,7 +324,6 @@ public class AllFlightDAO {
     public void BookingFlight(BookingFlight bookingFlight) throws SQLException {
         String sqlAddPass = "INSERT INTO passengers (first_name, last_name, date_of_birth, gender, passport_number, nationality) VALUES (?, ?, ?, ?, ?, ?)";
         String sqlAddBooking = "INSERT INTO bookings (passenger_id, flight_id, seat_id, email, phone, booking_date_time, booking_status, total_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
         Connection cn = null;
         PreparedStatement pStmAddPass = null;
         PreparedStatement pStmAddBooking = null;
@@ -576,7 +575,6 @@ public class AllFlightDAO {
                 } else {
                     allBooking.setSeatClass("Economy");
                 }
-
                 bookingList.add(allBooking);
             }
         } catch (SQLException e) {
