@@ -5,7 +5,6 @@
 package project;
 
 import Database.AllFlightDAO;
-import Modal.Seats;
 import Service.BookingFlight;
 import Service.Flight;
 import java.net.URL;
@@ -181,8 +180,6 @@ public class ProjectController implements Initializable {
     @FXML
     private TableColumn<BookingFlight, LocalDate> tcDOB;
     @FXML
-    private TableColumn<BookingFlight, String> tcGender;
-    @FXML
     private TableColumn<BookingFlight, String> tcPassportID;
     @FXML
     private TableColumn<BookingFlight, String> tcNationality;
@@ -196,8 +193,6 @@ public class ProjectController implements Initializable {
     private TableColumn<BookingFlight, String> tcPhone;
     @FXML
     private TableColumn<BookingFlight, LocalDateTime> tcBookingDate;
-    @FXML
-    private TableColumn<BookingFlight, String> tcGateNumber_Booking;
     @FXML
     private TableColumn<BookingFlight, String> tcFlightStatus_Passenger;
     @FXML
@@ -264,6 +259,7 @@ public class ProjectController implements Initializable {
     private TableColumn<BookingFlight, String> tcAirlineNameById;
     @FXML
     private TableColumn<BookingFlight, String> tcFlightNumberById;
+
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
             "Airbus A321neo"
@@ -303,11 +299,15 @@ public class ProjectController implements Initializable {
             "DELAYED",
             "CANCELLED"
     );
-    private boolean isChecking = false;
+
     @FXML
     private Button btnRefund;
     @FXML
     private Button btnDetailPass;
+    @FXML
+    private TableColumn<BookingFlight, Double> tcPriceAllBooking;
+
+    private boolean isChecking = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -1140,10 +1140,10 @@ public class ProjectController implements Initializable {
 
         if (flightsSelected != null) {
             try {
-                List<Seats> allSeats = dao.getSeatsByFlightId(flightsSelected.getFlightId());
+                List<Flight> allSeats = dao.getSeatsByFlightId(flightsSelected.getFlightId());
                 List<String> filteredSeats = new ArrayList<>();
 
-                for (Seats seat : allSeats) {
+                for (Flight seat : allSeats) {
                     String seatNumber = seat.getSeatNumber();
                     switch (seatType) {
                         case "First Class":
@@ -1190,7 +1190,6 @@ public class ProjectController implements Initializable {
             tcFirstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
             tcLastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
             tcDOB.setCellValueFactory(new PropertyValueFactory<>("DOB"));
-            tcGender.setCellValueFactory(new PropertyValueFactory<>("gender"));
             tcPassportID.setCellValueFactory(new PropertyValueFactory<>("passportId"));
             tcNationality.setCellValueFactory(new PropertyValueFactory<>("nationality"));
             tcSeatNumber.setCellValueFactory(new PropertyValueFactory<>("seatNumber"));
@@ -1198,10 +1197,10 @@ public class ProjectController implements Initializable {
             tcEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
             tcPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
             tcBookingDate.setCellValueFactory(new PropertyValueFactory<>("bookingDateTime"));
-            tcGateNumber_Booking.setCellValueFactory(new PropertyValueFactory<>("gateNumber"));
             tcFlightStatus_Passenger.setCellValueFactory(new PropertyValueFactory<>("flightStatus"));
             tcAirlineName_AllBooking.setCellValueFactory(new PropertyValueFactory<>("airlineName"));
             tcFlightNumber_AllBooking.setCellValueFactory(new PropertyValueFactory<>("flightNumber"));
+            tcPriceAllBooking.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 
             // Thiết lập dữ liệu cho TableView
             tvPassengerFlight.setItems(allBookingList);

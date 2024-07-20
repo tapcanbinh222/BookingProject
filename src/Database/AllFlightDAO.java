@@ -110,7 +110,7 @@ public class AllFlightDAO {
         String sqlFlights = "INSERT INTO flights (airline_id, aircraft_type_id, flight_number, origin_airport_code, destination_airport_code, departure_time, arrival_time, flight_date, flight_status, arrival_date, gate_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlPrices = "INSERT INTO flight_prices (flight_id, economy_price, business_price, first_class_price) VALUES (?, ?, ?, ?)";
 
-        try (Connection cn = connect.GetConnectDB(); PreparedStatement pStmFlights = cn.prepareStatement(sqlFlights, PreparedStatement.RETURN_GENERATED_KEYS); PreparedStatement pStmPrices = cn.prepareStatement(sqlPrices)) {
+        try (PreparedStatement pStmFlights = cn.prepareStatement(sqlFlights, PreparedStatement.RETURN_GENERATED_KEYS); PreparedStatement pStmPrices = cn.prepareStatement(sqlPrices)) {
 
             // Bắt đầu một giao dịch
             cn.setAutoCommit(false);
@@ -163,7 +163,7 @@ public class AllFlightDAO {
         String sqlFlights = "UPDATE flights SET airline_id = ?, aircraft_type_id = ?, flight_number = ?, origin_airport_code = ?, destination_airport_code = ?, departure_time = ?, arrival_time = ?, flight_date = ?, flight_status = ?, arrival_date = ?, gate_number = ? WHERE flight_id = ?";
         String sqlPrices = "UPDATE flight_prices SET economy_price = ?, business_price = ?, first_class_price = ? WHERE flight_id = ?";
 
-        try (Connection cn = connect.GetConnectDB(); PreparedStatement pStmFlights = cn.prepareStatement(sqlFlights); PreparedStatement pStmPrices = cn.prepareStatement(sqlPrices)) {
+        try (PreparedStatement pStmFlights = cn.prepareStatement(sqlFlights); PreparedStatement pStmPrices = cn.prepareStatement(sqlPrices)) {
 
             // Bắt đầu một giao dịch
             cn.setAutoCommit(false);
@@ -298,8 +298,8 @@ public class AllFlightDAO {
         return null; // Hoặc ném một ngoại lệ nếu không tìm thấy chuyến bay
     }
 
-    public ArrayList<Seats> getSeatsByFlightId(int flightId) throws SQLException {
-        ArrayList<Seats> seats = new ArrayList<>();
+    public ArrayList<Flight> getSeatsByFlightId(int flightId) throws SQLException {
+        ArrayList<Flight> seats = new ArrayList<>();
         String sql = "SELECT s.*, flight_id FROM seats s \n"
                 + "                 JOIN aircraft_types at ON s.aircraft_type_id = at.aircraft_type_id \n"
                 + "                 JOIN flights f ON at.aircraft_type_id = f.aircraft_type_id \n"
@@ -311,7 +311,7 @@ public class AllFlightDAO {
             ResultSet rs = pStm.executeQuery();
 
             while (rs.next()) {
-                Seats seat = new Seats();
+                Flight seat = new Flight();
                 seat.setSeatId(rs.getInt("seat_id"));
                 seat.setSeatNumber(rs.getString("seat_number"));
                 seat.setIsAvailable(rs.getBoolean("is_available"));
@@ -437,7 +437,7 @@ public class AllFlightDAO {
     public List<BookingFlight> getAllBookingDetails() {
         List<BookingFlight> bookingList = new ArrayList<>();
         String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, "
-                + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name "
+                + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name,b.total_price "
                 + "FROM bookings b "
                 + "JOIN passengers p ON b.passenger_id = p.passenger_id "
                 + "JOIN seats s ON b.seat_id = s.seat_id "
@@ -464,6 +464,7 @@ public class AllFlightDAO {
                 allBooking.setFlightNumber(rs.getString("flight_number"));
                 allBooking.setGateNumber(rs.getString("gate_number"));
                 allBooking.setAirlineName(rs.getString("airline_name"));
+                allBooking.setTotalPrice(rs.getDouble("total_price"));
 
                 // Optionally set seat class based on seat number
                 String seatNumber = rs.getString("seat_number");
@@ -514,6 +515,7 @@ public class AllFlightDAO {
                 allBooking.setFlightNumber(rs.getString("flight_number"));
                 allBooking.setGateNumber(rs.getString("gate_number"));
                 allBooking.setAirlineName(rs.getString("airline_name"));
+                allBooking.setTotalPrice(rs.getDouble("total_price"));
 
                 // Optionally set seat class based on seat number
                 String seatNumber = rs.getString("seat_number");

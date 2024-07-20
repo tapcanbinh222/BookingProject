@@ -253,25 +253,24 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apPassengerFlight" layoutX="-1.0" layoutY="10.0" prefHeight="390.0" prefWidth="1187.0" visible="false">
+      <AnchorPane fx:id="apPassengerFlight" layoutX="-1.0" layoutY="10.0" prefHeight="390.0" prefWidth="1187.0">
          <children>
-            <TableView fx:id="tvPassengerFlight" layoutX="12.0" layoutY="-8.0" prefHeight="389.0" prefWidth="1163.0">
+            <TableView fx:id="tvPassengerFlight" layoutX="12.0" layoutY="14.0" prefHeight="389.0" prefWidth="1163.0">
                <columns>
+                  <TableColumn fx:id="tcFlightNumber_AllBooking" prefWidth="66.0" text="FlightNumber" />
+                  <TableColumn fx:id="tcFlightStatus_Passenger" prefWidth="62.0" text="FlightStatus" />
                   <TableColumn fx:id="tcFirstName" prefWidth="46.0" text="First Name" />
                   <TableColumn fx:id="tcLastName" prefWidth="49.0" text="Last Name" />
-                  <TableColumn fx:id="tcFlightStatus_Passenger" prefWidth="62.0" text="FlightStatus" />
                   <TableColumn fx:id="tcDOB" minWidth="0.0" prefWidth="75.0" text="Date Of Birth" />
-                  <TableColumn fx:id="tcGender" prefWidth="68.0" text="Gender" />
                   <TableColumn fx:id="tcPassportID" prefWidth="113.0" text="Passport ID/National ID" />
                   <TableColumn fx:id="tcNationality" prefWidth="70.0" text="Nationality" />
-                  <TableColumn fx:id="tcSeatNumber" minWidth="7.0" prefWidth="84.0" text="Seat Number" />
                   <TableColumn fx:id="tcSeatClass" prefWidth="63.0" text="Seat Class" />
-                  <TableColumn fx:id="tcGateNumber_Booking" prefWidth="91.0" text="Gate Number" />
+                  <TableColumn fx:id="tcSeatNumber" minWidth="7.0" prefWidth="84.0" text="Seat Number" />
                   <TableColumn fx:id="tcEmail" prefWidth="94.0" text="Email" />
                   <TableColumn fx:id="tcPhone" prefWidth="96.0" text="Phone" />
                   <TableColumn fx:id="tcBookingDate" prefWidth="110.0" text="Booking Date Time" />
                   <TableColumn fx:id="tcAirlineName_AllBooking" prefWidth="75.0" text="Airlinename" />
-                  <TableColumn fx:id="tcFlightNumber_AllBooking" prefWidth="66.0" text="FlightNumber" />
+                  <TableColumn fx:id="tcPriceAllBooking" prefWidth="75.0" text="Price" />
                </columns>
             </TableView>
          </children>
