@@ -253,7 +253,7 @@
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="apPassengerFlight" layoutX="-1.0" layoutY="10.0" prefHeight="390.0" prefWidth="1187.0">
+      <AnchorPane fx:id="apPassengerFlight" layoutX="-1.0" layoutY="10.0" prefHeight="390.0" prefWidth="1187.0" visible="false">
          <children>
             <TableView fx:id="tvPassengerFlight" layoutX="12.0" layoutY="14.0" prefHeight="389.0" prefWidth="1163.0">
                <columns>

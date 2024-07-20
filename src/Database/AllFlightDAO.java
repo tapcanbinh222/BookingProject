@@ -298,28 +298,28 @@ public class AllFlightDAO {
         return null; // Hoặc ném một ngoại lệ nếu không tìm thấy chuyến bay
     }
 
-    public ArrayList<Flight> getSeatsByFlightId(int flightId) throws SQLException {
-        ArrayList<Flight> seats = new ArrayList<>();
-        String sql = "SELECT s.*, flight_id FROM seats s \n"
-                + "                 JOIN aircraft_types at ON s.aircraft_type_id = at.aircraft_type_id \n"
-                + "                 JOIN flights f ON at.aircraft_type_id = f.aircraft_type_id \n"
-                + "                 WHERE f.flight_id = ?";
-
+     public List<Flight> getSeatsByFlightId(int flightId) throws SQLException {
+        String sql = "SELECT s.seat_id, s.seat_number " +
+                     "FROM seats s " +
+                     "LEFT JOIN bookings b ON s.seat_id = b.seat_id AND b.flight_id = ? " +
+                     "WHERE s.aircraft_type_id = (SELECT aircraft_type_id FROM flights WHERE flight_id = ?) " +
+                     "AND b.seat_id IS NULL"; // Only select available seats
+        List<Flight> seats = new ArrayList<>();
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql)) {
-
             pStm.setInt(1, flightId);
-            ResultSet rs = pStm.executeQuery();
-
-            while (rs.next()) {
-                Flight seat = new Flight();
-                seat.setSeatId(rs.getInt("seat_id"));
-                seat.setSeatNumber(rs.getString("seat_number"));
-                seat.setIsAvailable(rs.getBoolean("is_available"));
-                seats.add(seat);
+            pStm.setInt(2, flightId);
+            try (ResultSet rs = pStm.executeQuery()) {
+                while (rs.next()) {
+                    Flight seat = new Flight();
+                    seat.setSeatId(rs.getInt("seat_id"));
+                    seat.setSeatNumber(rs.getString("seat_number"));
+                    seats.add(seat);
+                }
             }
         }
         return seats;
     }
+
 
     public void BookingFlight(BookingFlight bookingFlight) throws SQLException {
         String sqlAddPass = "INSERT INTO passengers (first_name, last_name, date_of_birth, gender, passport_number, nationality) VALUES (?, ?, ?, ?, ?, ?)";
@@ -417,18 +417,21 @@ public class AllFlightDAO {
 
     // Other methods...
     public int getSeatIdByNumberAndFlight(int flightId, String seatNumber) throws SQLException {
-        String sql = "SELECT s.seat_id FROM seats s "
-                + "JOIN aircraft_types at ON s.aircraft_type_id = at.aircraft_type_id "
-                + "JOIN flights f ON at.aircraft_type_id = f.aircraft_type_id "
-                + "WHERE f.flight_id = ? AND s.seat_number = ?";
+        String sql = "SELECT s.seat_id " +
+                     "FROM seats s " +
+                     "LEFT JOIN bookings b ON s.seat_id = b.seat_id AND b.flight_id = ? " +
+                     "WHERE s.seat_number = ? AND " +
+                     "s.aircraft_type_id = (SELECT aircraft_type_id FROM flights WHERE flight_id = ?) " +
+                     "AND b.seat_id IS NULL"; // Ensure the seat is not already booked
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql)) {
             pStm.setInt(1, flightId);
             pStm.setString(2, seatNumber);
+            pStm.setInt(3, flightId);
             try (ResultSet rs = pStm.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt("seat_id");
                 } else {
-                    throw new SQLException("No seat found with the specified number for this flight.");
+                    throw new SQLException("No seat found with the specified number for this flight or the seat is already booked.");
                 }
             }
         }
@@ -443,57 +446,6 @@ public class AllFlightDAO {
                 + "JOIN seats s ON b.seat_id = s.seat_id "
                 + "JOIN flights f ON b.flight_id = f.flight_id "
                 + "JOIN airlines a ON f.airline_id = a.airline_id";
-
-        try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql); ResultSet rs = pStm.executeQuery()) {
-
-            while (rs.next()) {
-                BookingFlight allBooking = new BookingFlight();
-                allBooking.setPassengerId(rs.getInt("passenger_id"));
-                allBooking.setFirstName(rs.getString("first_name"));
-                allBooking.setLastName(rs.getString("last_name"));
-                allBooking.setDOB(rs.getDate("date_of_birth").toLocalDate());
-                allBooking.setGender(rs.getString("gender"));
-                allBooking.setPassportId(rs.getString("passport_number"));
-                allBooking.setNationality(rs.getString("nationality"));
-                allBooking.setSeatNumber(rs.getString("seat_number"));
-                allBooking.setBookingId(rs.getInt("booking_id"));
-                allBooking.setFlightStatus(rs.getString("flight_status"));
-                allBooking.setEmail(rs.getString("email"));
-                allBooking.setPhone(rs.getString("phone"));
-                allBooking.setBookingDateTime(rs.getTimestamp("booking_date_time").toLocalDateTime());
-                allBooking.setFlightNumber(rs.getString("flight_number"));
-                allBooking.setGateNumber(rs.getString("gate_number"));
-                allBooking.setAirlineName(rs.getString("airline_name"));
-                allBooking.setTotalPrice(rs.getDouble("total_price"));
-
-                // Optionally set seat class based on seat number
-                String seatNumber = rs.getString("seat_number");
-                if (seatNumber.endsWith("A")) {
-                    allBooking.setSeatClass("FirstClass");
-                } else if (seatNumber.endsWith("B")) {
-                    allBooking.setSeatClass("Business");
-                } else {
-                    allBooking.setSeatClass("Economy");
-                }
-
-                bookingList.add(allBooking);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-        return bookingList;
-    }
-
-    public List<BookingFlight> getAllBookingDetailsDelayed() {
-        List<BookingFlight> bookingList = new ArrayList<>();
-        String sql = "SELECT p.passenger_id, p.first_name, p.last_name, p.date_of_birth, p.gender, p.passport_number, p.nationality, "
-                + "s.seat_number, b.booking_id, b.email, b.phone, b.booking_date_time, f.flight_number, f.gate_number,f.flight_status, a.airline_name "
-                + "FROM bookings b "
-                + "JOIN passengers p ON b.passenger_id = p.passenger_id "
-                + "JOIN seats s ON b.seat_id = s.seat_id "
-                + "JOIN flights f ON b.flight_id = f.flight_id "
-                + "JOIN airlines a ON f.airline_id = a.airline_id WHERE f.flight_status = 'DELAYED'";
 
         try (Connection cn = connect.GetConnectDB(); PreparedStatement pStm = cn.prepareStatement(sql); ResultSet rs = pStm.executeQuery()) {
 

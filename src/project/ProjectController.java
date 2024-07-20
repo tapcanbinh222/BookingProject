@@ -994,14 +994,14 @@ public class ProjectController implements Initializable {
         BookingFlight bookingFlight = new BookingFlight();
 
         // Validate các trường đầu vào
-        if (txtFirstName.getText() == null || txtFirstName.getText().isEmpty()) {
+        if (isEmpty(txtFirstName)) {
             errorMessage.append("First Name\n");
             isFieldMissing = true;
         } else {
             bookingFlight.setFirstName(txtFirstName.getText());
         }
 
-        if (txtLastName.getText() == null || txtLastName.getText().isEmpty()) {
+        if (isEmpty(txtLastName)) {
             errorMessage.append("Last Name\n");
             isFieldMissing = true;
         } else {
@@ -1015,21 +1015,21 @@ public class ProjectController implements Initializable {
             bookingFlight.setDOB(dpDOB.getValue());
         }
 
-        if (comboBoxGender.getValue() == null) {
+        if (isEmpty(comboBoxGender)) {
             errorMessage.append("Gender\n");
             isFieldMissing = true;
         } else {
             bookingFlight.setGender(comboBoxGender.getValue());
         }
 
-        if (txtPassportID.getText() == null || txtPassportID.getText().isEmpty()) {
+        if (isEmpty(txtPassportID)) {
             errorMessage.append("Passport ID\n");
             isFieldMissing = true;
         } else {
             bookingFlight.setPassportId(txtPassportID.getText());
         }
 
-        if (comboBoxNational.getValue() == null) {
+        if (isEmpty(comboBoxNational)) {
             errorMessage.append("Nationality\n");
             isFieldMissing = true;
         } else {
@@ -1041,8 +1041,15 @@ public class ProjectController implements Initializable {
 
             String selectedSeatNumber = comboBoxSeat.getValue();
             if (selectedSeatNumber != null) {
-                int seatId = getSeatIdByNumberAndFlight(flightsSelected.getFlightId(), selectedSeatNumber);
-                bookingFlight.setSeatId(seatId);
+                try {
+                    int seatId = dao.getSeatIdByNumberAndFlight(flightsSelected.getFlightId(), selectedSeatNumber);
+                    bookingFlight.setSeatId(seatId);
+                    // Calculate total price only if seat number is valid
+                    bookingFlight.setTotalPrice(calculateTotalPrice(flightsSelected, selectedSeatNumber));
+                } catch (SQLException e) {
+                    errorMessage.append("Seat Selection\n");
+                    isFieldMissing = true;
+                }
             } else {
                 errorMessage.append("Seat Selection\n");
                 isFieldMissing = true;
@@ -1052,21 +1059,21 @@ public class ProjectController implements Initializable {
             isFieldMissing = true;
         }
 
-        if (txtEmail.getText() == null || txtEmail.getText().isEmpty()) {
+        if (isEmpty(txtEmail)) {
             errorMessage.append("Email\n");
             isFieldMissing = true;
         } else {
             bookingFlight.setEmail(txtEmail.getText());
         }
 
-        if (txtPhone.getText() == null || txtPhone.getText().isEmpty()) {
+        if (isEmpty(txtPhone)) {
             errorMessage.append("Phone\n");
             isFieldMissing = true;
         } else {
             bookingFlight.setPhone(txtPhone.getText());
         }
 
-        if (comboBoxSeatType.getValue() == null) {
+        if (isEmpty(comboBoxSeatType)) {
             errorMessage.append("Seat Type\n");
             isFieldMissing = true;
         } else {
@@ -1075,7 +1082,6 @@ public class ProjectController implements Initializable {
 
         bookingFlight.setBookingDateTime(LocalDateTime.now());
         bookingFlight.setBookingStatus("Confirmed");
-        bookingFlight.setTotalPrice(calculateTotalPrice(flightsSelected, comboBoxSeat.getValue()));
         bookingFlight.setAirlineName(flightsSelected.getAirlineName());
         bookingFlight.setFlightNumber(flightsSelected.getFlightNumber());
         bookingFlight.setFlightStatus(flightsSelected.getFlightStatus());
@@ -1110,28 +1116,21 @@ public class ProjectController implements Initializable {
         }
     }
 
-    private int getSeatIdByNumberAndFlight(int flightId, String seatNumber) {
-        // Implement the actual database query logic to fetch the seat ID based on seat number and flight ID
-        // Placeholder implementation:
-        int seatId = 0;
-        try {
-            AllFlightDAO dao = new AllFlightDAO();
-            seatId = dao.getSeatIdByNumberAndFlight(flightId, seatNumber);
-        } catch (SQLException e) {
-        }
-        return seatId;
-    }
-
     private double calculateTotalPrice(Flight flight, String seatNumber) {
-        double totalPrice = 0.0;
-        if (seatNumber.endsWith("A")) {
-            totalPrice = flight.getFirstClassPrice();
-        } else if (seatNumber.endsWith("B")) {
-            totalPrice = flight.getBusinessPrice();
-        } else {
-            totalPrice = flight.getEconomyPrice();
+        if (flight == null || seatNumber == null) {
+            throw new IllegalArgumentException("Flight and seatNumber must not be null");
         }
-        return totalPrice;
+
+        double basePrice;
+        if (seatNumber.endsWith("A")) {
+            basePrice = flight.getFirstClassPrice();
+        } else if (seatNumber.endsWith("B")) {
+            basePrice = flight.getBusinessPrice();
+        } else {
+            basePrice = flight.getEconomyPrice();
+        }
+
+        return basePrice;
     }
 
     private void filterSeatsByType(String seatType) {
@@ -1167,6 +1166,13 @@ public class ProjectController implements Initializable {
                 comboBoxSeat.getItems().clear();
                 comboBoxSeat.getItems().addAll(filteredSeats);
             } catch (SQLException e) {
+                e.printStackTrace();
+                // Show error message dialog
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Error Loading Seats");
+                alert.setContentText("An error occurred while loading the seats. Please try again.");
+                alert.showAndWait();
             }
         }
     }
