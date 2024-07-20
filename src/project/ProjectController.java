@@ -942,14 +942,19 @@ public class ProjectController implements Initializable {
     private void btnHandleChangeBooking(ActionEvent event) throws SQLException {
         try {
             Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
-
-            if (flightsSelected == null) {
-                showAlert("Error", "Selected Flight to Booking.");
-                apTvFlight.setVisible(true);
-                apButonCRUD.setVisible(true);
-                apAdd.setVisible(false);
-                apFindFlight.setVisible(true);
-
+            if (flightsSelected != null) {
+                if (!"SCHEDULED".equals(flightsSelected.getFlightStatus())) {
+                    apTvFlight.setVisible(true);
+                    apButonCRUD.setVisible(true);
+                    apAdd.setVisible(false);
+                    apFindFlight.setVisible(true);
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText("Invalid Flight Status");
+                    alert.setContentText("You can only book a flight with status 'SCHEDULE'.");
+                    alert.showAndWait();
+                    // Dừng quá trình đặt chỗ
+                }
             } else {
                 apFindFlight.setVisible(false);
                 apTvFlight.setVisible(false);
@@ -986,7 +991,8 @@ public class ProjectController implements Initializable {
     }
 
     @FXML
-    private void btnHandleBooking(ActionEvent event) {
+    private void btnHandleBooking(ActionEvent event
+    ) {
         AllFlightDAO dao = new AllFlightDAO();
         Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
         StringBuilder errorMessage = new StringBuilder("Missing Fields:\n");

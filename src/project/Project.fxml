@@ -22,7 +22,7 @@
                <items>
                   <MenuItem fx:id="flightDelayed" mnemonicParsing="false" onAction="#handleFlightDelayed" text="Delayed" />
                   <MenuItem fx:id="flightCancelled" mnemonicParsing="false" onAction="#handleFlightCancelled" text="Cancelled" />
-                  <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Delayed" />
+                  <MenuItem fx:id="flightScheduled" mnemonicParsing="false" onAction="#handleFlightScheduled" text="Scheduled" />
                </items></SplitMenuButton>
             <TableView fx:id="tvFlight" editable="true" layoutX="96.0" layoutY="85.0" prefHeight="453.0" prefWidth="994.0">
                <columns>
