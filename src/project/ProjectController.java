@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -313,6 +314,8 @@ public class ProjectController implements Initializable {
     );
 
     private boolean isChecking = false;
+    @FXML
+    private Button btnReset;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -348,8 +351,9 @@ public class ProjectController implements Initializable {
     AllFlightDAO allFlightDAO = new AllFlightDAO();
     ObservableList<Flight> allFlightList = FXCollections.observableArrayList(allFlightDAO.listAllFlight());
 
-    public void Flights() {
+    private TableColumn<Flight, Void> colAction;
 
+    public void Flights() {
         tcFlightNumber.setCellValueFactory(new PropertyValueFactory<>("flightNumber"));
         tcOrigin.setCellValueFactory(new PropertyValueFactory<>("originAirportCode"));
         tcDestination.setCellValueFactory(new PropertyValueFactory<>("destinationAirportCode"));
@@ -361,47 +365,50 @@ public class ProjectController implements Initializable {
         tcBusinessPrice.setCellValueFactory(new PropertyValueFactory<>("businessPrice"));
         tcFirstClassPrice.setCellValueFactory(new PropertyValueFactory<>("firstClassPrice"));
         tcFlightDate.setCellValueFactory(new PropertyValueFactory<>("flightDate"));
-        TableColumn<Flight, Void> colAction = new TableColumn<>("Action");
-        colAction.setCellFactory(col -> new TableCell<>() {
-            private final Button btnViewPassengers = new Button("View Passengers");
-            private final Button btnDetail = new Button("Detail");
 
-            private final HBox pane = new HBox(btnViewPassengers, btnDetail);
+        if (colAction == null) {
+            colAction = new TableColumn<>("Action");
+            colAction.setCellFactory(col -> new TableCell<>() {
+                private final Button btnViewPassengers = new Button("View Passengers");
+                private final Button btnDetail = new Button("Detail");
 
-            {
-                pane.setSpacing(10); // Set spacing between buttons
-            }
+                private final HBox pane = new HBox(btnViewPassengers, btnDetail);
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(pane);
-
-                    btnViewPassengers.setOnAction(event -> {
-                        Flight flight = getTableView().getItems().get(getIndex());
-                        loadPassengers(flight.getFlightId());
-                        apFindFlight.setVisible(false);
-                        apTvFlight.setVisible(false);
-                        apButonCRUD.setVisible(false);
-                        apAdd.setVisible(false);
-                        btnAdd.setVisible(false);
-                    });
-
-                    btnDetail.setOnAction(event -> {
-                        Flight flight = getTableView().getItems().get(getIndex());
-                        showFlightDetails(flight);
-                    });
+                {
+                    pane.setSpacing(10); // Set spacing between buttons
                 }
-            }
-        });
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(pane);
+
+                        btnViewPassengers.setOnAction(event -> {
+                            Flight flight = getTableView().getItems().get(getIndex());
+                            loadPassengers(flight.getFlightId());
+                            apFindFlight.setVisible(false);
+                            apTvFlight.setVisible(false);
+                            apButonCRUD.setVisible(false);
+                            apAdd.setVisible(false);
+                            btnAdd.setVisible(false);
+                        });
+
+                        btnDetail.setOnAction(event -> {
+                            Flight flight = getTableView().getItems().get(getIndex());
+                            showFlightDetails(flight);
+                        });
+                    }
+                }
+            });
+        }
 
         tvFlight.getColumns().add(colAction);
         tvFlight.setItems(allFlightList);
-
     }
+
     private ObservableList<BookingFlight> passengerList = FXCollections.observableArrayList();
 
     private void loadPassengers(int flightId) {
@@ -1028,7 +1035,13 @@ public class ProjectController implements Initializable {
             errorMessage.append("Date of Birth\n");
             isFieldMissing = true;
         } else {
-            bookingFlight.setDOB(dpDOB.getValue());
+            LocalDate dob = dpDOB.getValue();
+            bookingFlight.setDOB(dob);
+            int age = Period.between(dob, LocalDate.now()).getYears();
+            if (age < 12) {
+                errorMessage.append("Age must be over 12 years old\n");
+                isFieldMissing = true;
+            }
         }
 
         if (isEmpty(comboBoxGender)) {
@@ -1200,7 +1213,6 @@ public class ProjectController implements Initializable {
         apButonCRUD.setVisible(false);
         apButtonAllBooking.setVisible(true);
         apFindFlight.setVisible(false);
-
     }
     ObservableList<BookingFlight> allBookingList = FXCollections.observableArrayList(allFlightDAO.getAllBookingDetails());
 
@@ -1310,8 +1322,8 @@ public class ProjectController implements Initializable {
                     .collect(Collectors.toList());
         }
 
-        ObservableList<Flight> filteredFlightList = FXCollections.observableArrayList(filteredFlights);
-        tvFlight.setItems(filteredFlightList);
+        ObservableList<Flight> filteredFlightList1 = FXCollections.observableArrayList(filteredFlights);
+        tvFlight.setItems(filteredFlightList1);
 
         showAlert(message, "Displaying " + status + " flights.");
     }
@@ -1339,4 +1351,60 @@ public class ProjectController implements Initializable {
         apFindFlight.setVisible(true);
     }
 
+    @FXML
+    private void btnHandleReset(ActionEvent event) {
+        // Đặt lại các trường tìm kiếm về giá trị mặc định
+        dpFlightDate.setValue(null);
+        comboBoxOriginFind.setValue(null);
+        comboBoxDestinationFind.setValue(null);
+        currentSearchDate = null;
+
+        // Hiển thị lại tất cả các chuyến bay
+        tvFlight.setItems(allFlightList);
+
+        // Kiểm tra và thêm lại cột Action nếu bị mất
+        if (!tvFlight.getColumns().contains(colAction)) {
+            tvFlight.getColumns().add(colAction);
+        } else {
+            // Cập nhật lại cột Action để đảm bảo các nút hiển thị đúng cách
+            colAction.setCellFactory(col -> new TableCell<>() {
+                private final Button btnViewPassengers = new Button("View Passengers");
+                private final Button btnDetail = new Button("Detail");
+
+                private final HBox pane = new HBox(btnViewPassengers, btnDetail);
+
+                {
+                    pane.setSpacing(10); // Set spacing between buttons
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(pane);
+
+                        btnViewPassengers.setOnAction(event -> {
+                            Flight flight = getTableView().getItems().get(getIndex());
+                            loadPassengers(flight.getFlightId());
+                            apFindFlight.setVisible(false);
+                            apTvFlight.setVisible(false);
+                            apButonCRUD.setVisible(false);
+                            apAdd.setVisible(false);
+                            btnAdd.setVisible(false);
+                        });
+
+                        btnDetail.setOnAction(event -> {
+                            Flight flight = getTableView().getItems().get(getIndex());
+                            showFlightDetails(flight);
+                        });
+                    }
+                }
+            });
+        }
+
+        // Thông báo người dùng rằng tất cả các trường đã được đặt lại
+        showAlert("Reset", "All fields have been reset and all flights are displayed.");
+    }
 }
