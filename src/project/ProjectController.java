@@ -259,6 +259,18 @@ public class ProjectController implements Initializable {
     private TableColumn<BookingFlight, String> tcAirlineNameById;
     @FXML
     private TableColumn<BookingFlight, String> tcFlightNumberById;
+    @FXML
+    private Button btnRefund;
+    @FXML
+    private Button btnDetailPass;
+    @FXML
+    private TableColumn<BookingFlight, Double> tcPriceAllBooking;
+    @FXML
+    private AnchorPane apPassRefund;
+    @FXML
+    private Button btnBackViewPassById1;
+    @FXML
+    private Button btnRefund1;
 
     ObservableList<String> options = FXCollections.observableArrayList(
             "Boeing 787 Dreamliner",
@@ -299,13 +311,6 @@ public class ProjectController implements Initializable {
             "DELAYED",
             "CANCELLED"
     );
-
-    @FXML
-    private Button btnRefund;
-    @FXML
-    private Button btnDetailPass;
-    @FXML
-    private TableColumn<BookingFlight, Double> tcPriceAllBooking;
 
     private boolean isChecking = false;
 
@@ -940,9 +945,16 @@ public class ProjectController implements Initializable {
     @FXML
 
     private void btnHandleChangeBooking(ActionEvent event) throws SQLException {
+
         try {
             Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
-            if (flightsSelected != null) {
+            if (flightsSelected == null) {
+                showAlert("Error", "Selected Flight to Booking.");
+                apTvFlight.setVisible(true);
+                apButonCRUD.setVisible(true);
+                apAdd.setVisible(false);
+                apFindFlight.setVisible(true);
+            } else if (flightsSelected != null) {
                 if (!"SCHEDULED".equals(flightsSelected.getFlightStatus())) {
                     apTvFlight.setVisible(true);
                     apButonCRUD.setVisible(true);
@@ -953,35 +965,34 @@ public class ProjectController implements Initializable {
                     alert.setHeaderText("Invalid Flight Status");
                     alert.setContentText("You can only book a flight with status 'SCHEDULE'.");
                     alert.showAndWait();
-                    // Dừng quá trình đặt chỗ
+                } else {
+                    apFindFlight.setVisible(false);
+                    apTvFlight.setVisible(false);
+                    apButonCRUD.setVisible(false);
+                    apBooking.setVisible(true);
+                    txtGetFlightNumber.setText(flightsSelected.getFlightNumber());
+                    txtGetFlightNumber.setEditable(false);
+                    txtGetOrigin.setText(flightsSelected.getOriginAirportCode());
+                    txtGetOrigin.setEditable(false);
+                    txtGetDestination.setText(flightsSelected.getDestinationAirportCode());
+                    txtGetDestination.setEditable(false);
+                    txtGetDepartureTime.setText(flightsSelected.getDepartureTime().toString());
+                    txtGetDepartureTime.setEditable(false);
+                    txtGetArrivalTime.setText(flightsSelected.getArrivalTime().toString());
+                    txtGetArrivalTime.setEditable(false);
+                    txtGetAirlineName.setText(flightsSelected.getAirlineName());
+                    txtGetAirlineName.setEditable(false);
+                    txtGetFlightStatus.setText(flightsSelected.getFlightStatus());
+                    txtGetFlightStatus.setEditable(false);
+                    txtGetGateNumber.setText(flightsSelected.getGateNumber());
+                    txtGetGateNumber.setEditable(false);
+                    txtGetEconomyPrice.setText(Double.toString(flightsSelected.getEconomyPrice()));
+                    txtGetEconomyPrice.setEditable(false);
+                    txtGetBusinessPrice.setText(Double.toString(flightsSelected.getBusinessPrice()));
+                    txtGetBusinessPrice.setEditable(false);
+                    txtGetFirtsClassPrice.setText(Double.toString(flightsSelected.getFirstClassPrice()));
+                    dpGetDepartureDate.setValue(flightsSelected.getFlightDate());
                 }
-            } else {
-                apFindFlight.setVisible(false);
-                apTvFlight.setVisible(false);
-                apButonCRUD.setVisible(false);
-                apBooking.setVisible(true);
-                txtGetFlightNumber.setText(flightsSelected.getFlightNumber());
-                txtGetFlightNumber.setEditable(false);
-                txtGetOrigin.setText(flightsSelected.getOriginAirportCode());
-                txtGetOrigin.setEditable(false);
-                txtGetDestination.setText(flightsSelected.getDestinationAirportCode());
-                txtGetDestination.setEditable(false);
-                txtGetDepartureTime.setText(flightsSelected.getDepartureTime().toString());
-                txtGetDepartureTime.setEditable(false);
-                txtGetArrivalTime.setText(flightsSelected.getArrivalTime().toString());
-                txtGetArrivalTime.setEditable(false);
-                txtGetAirlineName.setText(flightsSelected.getAirlineName());
-                txtGetAirlineName.setEditable(false);
-                txtGetFlightStatus.setText(flightsSelected.getFlightStatus());
-                txtGetFlightStatus.setEditable(false);
-                txtGetGateNumber.setText(flightsSelected.getGateNumber());
-                txtGetGateNumber.setEditable(false);
-                txtGetEconomyPrice.setText(Double.toString(flightsSelected.getEconomyPrice()));
-                txtGetEconomyPrice.setEditable(false);
-                txtGetBusinessPrice.setText(Double.toString(flightsSelected.getBusinessPrice()));
-                txtGetBusinessPrice.setEditable(false);
-                txtGetFirtsClassPrice.setText(Double.toString(flightsSelected.getFirstClassPrice()));
-                dpGetDepartureDate.setValue(flightsSelected.getFlightDate());
 
                 // Hiển thị danh sách ghế
             }
@@ -991,8 +1002,7 @@ public class ProjectController implements Initializable {
     }
 
     @FXML
-    private void btnHandleBooking(ActionEvent event
-    ) {
+    private void btnHandleBooking(ActionEvent event) {
         AllFlightDAO dao = new AllFlightDAO();
         Flight flightsSelected = tvFlight.getSelectionModel().getSelectedItem();
         StringBuilder errorMessage = new StringBuilder("Missing Fields:\n");
@@ -1240,9 +1250,10 @@ public class ProjectController implements Initializable {
     }
     private ObservableList<Flight> filteredFlightList = FXCollections.observableArrayList();
 
+    private LocalDate currentSearchDate;
+
     @FXML
     private void btnFind(ActionEvent event) {
-
         LocalDate flightDate = dpFlightDate.getValue();
         String origin = comboBoxOriginFind.getValue();
         String destination = comboBoxDestinationFind.getValue();
@@ -1252,6 +1263,9 @@ public class ProjectController implements Initializable {
             showAlert("Invalid Input", "Please fill in all fields.");
             return;
         }
+
+        // Lưu trữ ngày tìm kiếm hiện tại
+        currentSearchDate = flightDate;
 
         // Tìm kiếm trong danh sách chuyến bay
         filteredFlightList.clear();
@@ -1269,6 +1283,7 @@ public class ProjectController implements Initializable {
         // Kiểm tra kết quả tìm kiếm
         if (filteredFlightList.isEmpty()) {
             showAlertINFORMATION("No Results", "No flights found for the given criteria.");
+            currentSearchDate = null; // Reset the search date if no results found
         }
     }
 
@@ -1280,40 +1295,40 @@ public class ProjectController implements Initializable {
         alert.showAndWait();
     }
 
+    private void handleFlightStatus(ActionEvent event, String status, String message) {
+        List<Flight> filteredFlights;
+
+        if (currentSearchDate != null) {
+            // Lọc theo ngày tìm kiếm và trạng thái chuyến bay
+            filteredFlights = allFlightList.stream()
+                    .filter(flight -> status.equals(flight.getFlightStatus()) && flight.getFlightDate().equals(currentSearchDate))
+                    .collect(Collectors.toList());
+        } else {
+            // Chỉ lọc theo trạng thái chuyến bay
+            filteredFlights = allFlightList.stream()
+                    .filter(flight -> status.equals(flight.getFlightStatus()))
+                    .collect(Collectors.toList());
+        }
+
+        ObservableList<Flight> filteredFlightList = FXCollections.observableArrayList(filteredFlights);
+        tvFlight.setItems(filteredFlightList);
+
+        showAlert(message, "Displaying " + status + " flights.");
+    }
+
     @FXML
     private void handleFlightCancelled(ActionEvent event) {
-        List<Flight> cancelledFlights = allFlightList.stream()
-                .filter(flight -> "CANCELLED".equals(flight.getFlightStatus()))
-                .collect(Collectors.toList());
-
-        ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
-        tvFlight.setItems(cancelledFlightList);
-
-        showAlert("Flight Cancelled", "Displaying CANCELLED flights.");
+        handleFlightStatus(event, "CANCELLED", "Flight Cancelled");
     }
 
     @FXML
     private void handleFlightDelayed(ActionEvent event) {
-        List<Flight> cancelledFlights = allFlightList.stream()
-                .filter(flight -> "DELAYED".equals(flight.getFlightStatus()))
-                .collect(Collectors.toList());
-
-        ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
-        tvFlight.setItems(cancelledFlightList);
-
-        showAlert("Flight DELAYED", "Displaying DELAYED flights.");
+        handleFlightStatus(event, "DELAYED", "Flight Delayed");
     }
 
     @FXML
     private void handleFlightScheduled(ActionEvent event) {
-        List<Flight> cancelledFlights = allFlightList.stream()
-                .filter(flight -> "SCHEDULED".equals(flight.getFlightStatus()))
-                .collect(Collectors.toList());
-
-        ObservableList<Flight> cancelledFlightList = FXCollections.observableArrayList(cancelledFlights);
-        tvFlight.setItems(cancelledFlightList);
-
-        showAlert("Flight SCHEDULED", "Displaying SCHEDULED flights.");
+        handleFlightStatus(event, "SCHEDULED", "Flight Scheduled");
     }
 
     @FXML
