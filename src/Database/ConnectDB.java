@@ -13,7 +13,7 @@ public class ConnectDB {
 
     public Connection GetConnectDB() {
         try {
-            String url = "jdbc:sqlserver://localhost:1433;databaseName= FlightBookingDBTestV13;";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName= FlightBookingDBTestV16;";
             String user = "sa";
             String password = "1";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

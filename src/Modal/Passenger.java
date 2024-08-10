@@ -12,12 +12,13 @@ public class Passenger {
     private String gender;
     private String passportId;
     private String nationality;
+    private String passengerType;
 
     // Constructors
     public Passenger() {
     }
 
-    public Passenger(int passengerId, String firstName, String lastName, LocalDate DOB, String gender, String passportId, String nationality) {
+    public Passenger(int passengerId, String firstName, String lastName, LocalDate DOB, String gender, String passportId, String nationality, String passengerType) {
         this.passengerId = passengerId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,9 +26,9 @@ public class Passenger {
         this.gender = gender;
         this.passportId = passportId;
         this.nationality = nationality;
+        this.passengerType = passengerType;
     }
 
-    // Getter và setter cho các trường dữ liệu
     public int getPassengerId() {
         return passengerId;
     }
@@ -84,9 +85,16 @@ public class Passenger {
         this.nationality = nationality;
     }
 
+    public String getPassengerType() {
+        return passengerType;
+    }
+
+    public void setPassengerType(String passengerType) {
+        this.passengerType = passengerType;
+    }
+
     public String getFormattedFlightDate() {
         return DOB.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
-
 
 }

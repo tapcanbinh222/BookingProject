@@ -7,10 +7,12 @@ package Service;
 import Modal.Airlines;
 import Modal.Booking;
 import Modal.Flights;
+import Modal.Infants;
 import Modal.Passenger;
 import Modal.Seats;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  *
@@ -33,6 +35,10 @@ public class BookingFlight {
     private String flightStatus;
     private String airlineName;
     private String flightNumber;
+    private LocalTime departureTime;
+    private LocalTime arrivalTime;
+    private LocalDate arrivalDate;
+    private LocalDate flightDate;
     private int bookingId;
     private String email;
     private String phone;
@@ -40,12 +46,16 @@ public class BookingFlight {
     private int seatId;
     private String bookingStatus;
     private double totalPrice;
+    private int accompanyingAdultId;
+    private String fullName;
 
     private Passenger passenger;
     private Seats seats;
     private Booking booking;
     private Flights flights;
     private Airlines airlines;
+    private String passengerType;
+    private Infants infants;
 
     public BookingFlight() {
         this.passenger = new Passenger();
@@ -53,7 +63,19 @@ public class BookingFlight {
         this.booking = new Booking();
         this.flights = new Flights();
         this.airlines = new Airlines();
+        this.infants = new Infants();
 
+    }
+
+    public int getAccompanyingAdultId() {
+        return accompanyingAdultId;
+    }
+
+    public void setAccompanyingAdultId(int accompanyingAdultId) {
+        this.accompanyingAdultId = accompanyingAdultId;
+        if (infants != null) {
+            infants.setAccompanyingAdultId(accompanyingAdultId);
+        }
     }
 
     public String getFlightStatus() {
@@ -110,7 +132,49 @@ public class BookingFlight {
             passenger.setFirstName(firstName);
         }
     }
+public LocalTime getDepartureTime() {
+        return departureTime;
+    }
 
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+        if (flights != null) {
+            flights.setDepartureTime(departureTime);
+        }
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+        if (flights != null) {
+            flights.setArrivalTime(arrivalTime);
+        }
+    }
+
+    public LocalDate getFlightDate() {
+        return flightDate;
+    }
+
+    public void setFlightDate(LocalDate flightDate) {
+        this.flightDate = flightDate;
+        if (flights != null) {
+            flights.setFlightDate(flightDate);
+        }
+    }
+
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
+    }
+
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
+        if (flights != null) {
+            flights.setArrivalDate(arrivalDate);
+        }
+    }
     public String getLastName() {
         return lastName;
     }
@@ -302,10 +366,6 @@ public class BookingFlight {
         }
     }
 
-    
-
-   
-
     public String getBookingStatus() {
         return bookingStatus;
     }
@@ -328,6 +388,19 @@ public class BookingFlight {
         }
     }
 
-   
+    public String getPassengerType() {
+        return passengerType;
+    }
+
+    public void setPassengerType(String passengerType) {
+        this.passengerType = passengerType;
+        if (passenger != null) {
+            passenger.setPassengerType(passengerType);
+        }
+    }
+
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
 
 }

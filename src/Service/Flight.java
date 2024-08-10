@@ -10,6 +10,7 @@ import Modal.Airports;
 import Modal.Booking;
 import Modal.FlightPrices;
 import Modal.Flights;
+import Modal.Infants;
 import Modal.Passenger;
 import Modal.Payments;
 import Modal.Seats;
@@ -24,7 +25,6 @@ import java.time.format.DateTimeFormatter;
  */
 public class Flight {
 
-   
     //AircraftTypes
     private int aircraftTypeId;
     private String aircraftTypeName;
@@ -71,6 +71,7 @@ public class Flight {
     private String gender;
     private String passportId;
     private String nationality;
+    private String passengerType;
     //Payments
     private int paymentId;
     private LocalDate paymentDate;
@@ -81,7 +82,10 @@ public class Flight {
     private int seatId;
     private String seatNumber;
     private boolean isAvailable;
-
+    //infants
+    private int infantId;
+    private int accompanyingAdultId;
+    
     private AircraftTypes aircraftTypes;
     private Airlines airlines;
     private Airports airports;
@@ -91,17 +95,20 @@ public class Flight {
     private Passenger passenger;
     private Payments payments;
     private Seats seats;
-    
-     public Flight(){
-     this.aircraftTypes = new AircraftTypes();
-     this.airlines = new Airlines();
-     this.airports = new Airports();
-     this. booking = new Booking();
-     this.flightPrices = new FlightPrices();
-     this.flights = new Flights();
-     this.passenger = new Passenger();
-     this.payments = new Payments();
-     this.seats = new Seats();
+    private Infants infants;
+
+    public Flight() {
+        this.aircraftTypes = new AircraftTypes();
+        this.airlines = new Airlines();
+        this.airports = new Airports();
+        this.booking = new Booking();
+        this.flightPrices = new FlightPrices();
+        this.flights = new Flights();
+        this.passenger = new Passenger();
+        this.payments = new Payments();
+        this.seats = new Seats();
+        this.infants = new Infants();
+
     }
 
     public Flight(int aircraftTypeId, String aircraftTypeName, int economySeats, int firstClassSeats, int businessSeats, int airlineId, String airlineName, String airlineCode, String airportCode, String airportName, String city, String country, int bookingId, String email, String phone, LocalDateTime bookingDateTime, double totalPrice, String bookingStatus, int flightId, int flightPriceId, double economyPrice, double businessPrice, double firstClassPrice, String flightNumber, String originAirportCode, String destinationAirportCode, String flightStatus, LocalTime departureTime, LocalTime arrivalTime, LocalDate flightDate, LocalDate arrivalDate, String gateNumber, int passengerId, String firstName, String lastName, LocalDate DOB, String gender, String passportId, String nationality, int paymentId, LocalDate paymentDate, String paymentMethod, double amount, String paymentStatus, int seatId, int aircraftTypeID, String seatNumber, boolean isAvailable, AircraftTypes aircraftTypes, Airlines airlines, Airports airports, Booking booking, FlightPrices flightPrices, Flights flights, Passenger passenger, Payments payments, Seats seats) {
@@ -163,8 +170,6 @@ public class Flight {
         this.seats = seats;
     }
 
-    
-    
     // Getters and Setters for AircraftTypes
     public int getAircraftTypeId() {
         return aircraftTypeId;
@@ -522,7 +527,8 @@ public class Flight {
             flights.setGateNumber(gateNumber);
         }
     }
-public String getFormattedDepartureTime() {
+
+    public String getFormattedDepartureTime() {
         return departureTime.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
@@ -537,6 +543,7 @@ public String getFormattedDepartureTime() {
     public String getFormattedArrivalDate() {
         return arrivalDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
+
     // Getters and Setters for Passenger
     public int getPassengerId() {
         return passengerId;
@@ -612,6 +619,17 @@ public String getFormattedDepartureTime() {
         this.nationality = nationality;
         if (passenger != null) {
             passenger.setNationality(nationality);
+        }
+    }
+
+    public String getPassengerType() {
+        return passengerType;
+    }
+
+    public void setPassengerType(String passengerType) {
+        this.nationality = passengerType;
+        if (passenger != null) {
+            passenger.setPassengerType(passengerType);
         }
     }
 
@@ -694,7 +712,7 @@ public String getFormattedDepartureTime() {
         }
     }
 
-    public boolean isIsAvailable() {
+    public boolean getIsAvailable() {
         return isAvailable;
     }
 
@@ -775,5 +793,28 @@ public String getFormattedDepartureTime() {
 
     public void setSeats(Seats seats) {
         this.seats = seats;
+    }
+
+    //Infants
+    public int getAccompanyingAdultId() {
+        return accompanyingAdultId;
+    }
+
+    public void setAccompanyingAdultId(int accompanyingAdultId) {
+        this.accompanyingAdultId = accompanyingAdultId;
+        if (infants != null) {
+            infants.setAccompanyingAdultId(accompanyingAdultId);
+        }
+    }
+
+    public int geInfantId() {
+        return infantId;
+    }
+
+    public void setInfantId(int infantId) {
+        this.accompanyingAdultId = infantId;
+        if (infants != null) {
+            infants.setInfantId(infantId);
+        }
     }
 }

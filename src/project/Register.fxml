@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.RegisterController">
+    <children>
+        <AnchorPane prefHeight="600.0" prefWidth="802.0" style="-fx-background-color: linear-gradient(to bottom right, #283c86, #45a247);" stylesheets="@../CSS/LoginStyles.css">
+            <children>
+                <ImageView fitHeight="133.0" fitWidth="136.0" layoutX="335.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../Image/Logoapp.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="199.0" layoutY="147.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" styleClass="label-title" stylesheets="@../CSS/LoginStyles.css" text="Welcome to Air Ticket Booking App" textFill="WHITE">
+                    <font>
+                        <Font name="Arial" size="24.0" />
+                    </font>
+                </Label>
+                <AnchorPane layoutX="201.0" layoutY="204.0" prefHeight="400.0" prefWidth="400.0" style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-background-radius: 10; -fx-padding: 20;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="201.0" AnchorPane.topAnchor="200.0">
+                    <children>
+                        <Label layoutX="145.0" layoutY="14.0" style="-fx-font-size: 28px; -fx-font-weight: bold;" text="Register" textFill="#333">
+                            <font>
+                                <Font name="Arial Bold" size="28.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="usernameField" layoutX="76.0" layoutY="89.0" prefHeight="26.0" prefWidth="249.0" promptText="Username..." style="-fx-opacity: 0.9;" />
+                        <TextField fx:id="emailField" layoutX="75.0" layoutY="147.0" prefHeight="26.0" prefWidth="249.0" promptText="Email..." style="-fx-opacity: 0.9;" />
+                        <PasswordField fx:id="passwordField" layoutX="74.0" layoutY="210.0" prefHeight="26.0" prefWidth="250.0" promptText="Password..." style="-fx-opacity: 0.9;" />
+                        <Button layoutX="74.0" layoutY="282.0" mnemonicParsing="false" onAction="#handleRegisterAction" prefHeight="26.0" prefWidth="250.0" style="-fx-background-color: #45a247; -fx-opacity: 0.9;" stylesheets="@../CSS/LoginStyles.css" text="Register" textFill="WHITE">
+                            <font>
+                                <Font name="Arial Bold" size="15.0" />
+                            </font>
+                        </Button>
+                        <Label layoutX="78.0" layoutY="321.0" text="I have an account!">
+                            <font>
+                                <Font name="Arial Italic" size="14.0" />
+                            </font>
+                        </Label>
+                        <Button layoutX="241.0" layoutY="319.0" mnemonicParsing="false" onAction="#handleLoginAction" prefHeight="23.0" prefWidth="82.0" style="-fx-background-color: #333;" stylesheets="@../CSS/LoginStyles.css" text="Login" textFill="WHITE">
+                            <font>
+                                <Font name="Arial Bold" size="12.0" />
+                            </font>
+                        </Button>
+                        <Label layoutX="73.0" layoutY="69.0" text="Username:" />
+                        <Label layoutX="74.0" layoutY="186.0" text="Password:" />
+                  <Label layoutX="76.0" layoutY="127.0" text="Email:" />
+                  <Label layoutX="79.0" layoutY="248.0" text="Role:" />
+                  <ChoiceBox fx:id="roleChoiceBox" layoutX="223.0" layoutY="242.0" prefHeight="30.0" prefWidth="100.0" style="-fx-opacity: 0.9; -fx-background-radius: 10;" />
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

@@ -21,14 +21,14 @@ public class Project extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        URL url = new File("src/project/Project.fxml").toURI().toURL();
+        URL url = new File("src/project/Login.fxml").toURI().toURL();
         Parent root = FXMLLoader.load(url);
 
         Scene scene = new Scene(root);
-
         stage.setScene(scene);
         stage.show();
     }
+   
 
     /**
      * @param args the command line arguments
